@@ -1,14 +1,13 @@
 git init
 git remote add origin https://github.com/saeedhei/team-soraya-mahmoudi.git
 git branch -M main
-git push -u origin main
-
-git remote add origin https://github.com/saeedhei/team-soraya-mahmoudi.git
-git remote -v
 
 git add .
 git commit -m "ts updated"
 git push origin main
+
+git remote add origin https://github.com/saeedhei/team-soraya-mahmoudi.git
+git remote -v
 
 error: src refspec main does not match any
 error: failed to push some refs to 'https://github.com/saeedhei/devops-github-actions.git'
