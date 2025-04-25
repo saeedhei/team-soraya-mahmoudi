@@ -1,9 +1,12 @@
-
+import PublicLayout from "@/layouts/PublicLayout";
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-white text-blue-900">
-      <h1 className="text-3xl font-bold text-center mt-30">welcom to MedicApp</h1>
-    </div>
+    <PublicLayout>
+      <section className="text-center py-20">
+        <h1 className="text-4xl font-bold text-blue-600">Welcome to Medic App</h1>
+        <p className="mt-4 text-gray-600">Book your doctor appointments online easily and quickly.</p>
+      </section>
+    </PublicLayout>
   );
 }
