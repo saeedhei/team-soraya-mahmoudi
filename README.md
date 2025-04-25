@@ -15,3 +15,12 @@ The app features both **public and private pages**, with a full **authentication
 - **React.js** – Frontend UI with reusable components  
 - **Docker** – Containerized deployment for consistency  
 - **Tailwind CSS** – Utility-first CSS framework for fast and responsive UI design
+
+# GraphQL Documentation
+
+## Table of Contents
+1. [GraphQL Basics](./graphql-basics.md)
+2. [Schema & Resolvers](./schema-and-resolvers.md)
+3. [Queries & Mutations](./queries-and-mutations.md)
+4. [Using Apollo Client with React](./apollo-client-react.md)
+5. [Advanced Features](./advanced-features.md)
