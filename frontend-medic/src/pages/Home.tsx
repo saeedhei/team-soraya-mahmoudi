@@ -25,7 +25,7 @@ export default function Home() {
        image="/images/doctors/alex.png"
        />
     </div>
-      </section>
+    </section>
     </PublicLayout>
   );
 }
