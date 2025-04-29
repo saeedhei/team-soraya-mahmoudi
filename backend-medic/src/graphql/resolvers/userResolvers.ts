@@ -15,10 +15,10 @@ export const userResolvers= {
             const { username,email,password}= args;
             
 
-     // ۱. هش کردن پسورد
+     // hashedPassword
       const hashedPassword = await bcrypt.hash(password, 10);
 
-      // ۲. ساخت کاربر جدید
+      // create new user
       const user = await User.create({
         username,
         email,
@@ -27,11 +27,33 @@ export const userResolvers= {
       
       const token = jwt.sign({ id: user.id }, SECRET, { expiresIn: '7d' });
 
-      // ۳. برگردوندن نتیجه
+      // result
       return {
         token,
         user,
       };
     },
+
+    //login mutation
+    login: async(_:any, args: {email:string; password:string})=>{
+      const {email, password}=args;
+
+      const user=await User.findOne({email});
+      if(!user){
+        throw new Error('Invalid credentials');
+      }
+
+      const isPasswordValid= await bcrypt.compare(password,user.password);
+      if(!isPasswordValid){
+        throw new Error('Invalid credentials')
+      } 
+
+      const token= jwt.sign({ id:user.id}, SECRET, {expiresIn: '7d'});
+
+      return{
+        token,
+        user,
+      };
+    }
   },
 };
