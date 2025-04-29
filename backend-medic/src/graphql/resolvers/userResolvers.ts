@@ -14,7 +14,11 @@ export const userResolvers= {
         signup: async (_:any, args:{username:string, email:string, password:string})=>{
             const { username,email,password}= args;
             
-
+      //check email
+      const existingUser= await User.findOne({email});
+      if(existingUser){
+        throw new Error('Email is already in use')
+      }
      // hashedPassword
       const hashedPassword = await bcrypt.hash(password, 10);
 
