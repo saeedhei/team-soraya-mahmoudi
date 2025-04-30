@@ -1,4 +1,5 @@
 import { User } from '../../domain/users/models/user.model'; 
+import { signupSchema } from '../../domain/users/validation/userValidation';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 const SECRET = process.env.JWT_SECRET || 'myverysecretkey';
@@ -12,7 +13,8 @@ export const userResolvers= {
     },
     Mutation:{
         signup: async (_:any, args:{username:string, email:string, password:string})=>{
-            const { username,email,password}= args;
+            const validatedData=signupSchema.parse(args);
+            const {username, email, password}= validatedData;
             
       //check email
       const existingUser= await User.findOne({email});
