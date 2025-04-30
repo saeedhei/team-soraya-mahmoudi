@@ -5,6 +5,8 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
+import passport  from 'passport';
+import './config/passport'
 
 import { userTypeDefs as typeDefs } from './graphql/typeDefs';
 import { resolvers } from './graphql/resolvers';
@@ -18,6 +20,7 @@ async function startServer() {
   const app = express();
   app.use(cors());
   app.use(bodyParser.json());
+  app.use(passport.initialize());
 
   const server = new ApolloServer({
     typeDefs,
@@ -25,7 +28,16 @@ async function startServer() {
   });
   await server.start();
 
-  app.use('/graphql', expressMiddleware(server));
+  app.use('/graphql', 
+  expressMiddleware(server,{
+    context: async ({ req }) => {
+      return new Promise<{user:any}>((resolve) => {
+        passport.authenticate('jwt', { session: false }, (_err:any, user:any) => {
+          resolve({ user });
+        })(req);
+      });
+    },
+  }));
 
   app.get('/', (_req, res) => {
     res.send('🚀 Server is running! Visit /graphql');
