@@ -25,6 +25,13 @@ export const userResolvers= {
       if(existingUser){
         throw new Error('Email is already in use')
       }
+
+      // ✅ Check username
+      const existingUsername = await User.findOne({ username });
+      if (existingUsername) {
+      throw new Error('Username is already in use');
+      }
+      
      //Step3: hashedPassword
       const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -47,6 +54,7 @@ export const userResolvers= {
       
       //Step7: Create login token(valid for 7days)
       const token = jwt.sign({ id: user.id }, SECRET, { expiresIn: '7d' });
+      console.log('✅ verificationToken:', verificationToken);
 
       // result
       return {
