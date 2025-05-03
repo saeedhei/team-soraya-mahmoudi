@@ -2,6 +2,7 @@ import { User } from '../../domain/users/models/user.model';
 import { signupSchema } from '../../domain/users/validation/userValidation';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+
 const SECRET = process.env.JWT_SECRET || 'myverysecretkey';
 
 export const userResolvers= {
