@@ -10,7 +10,7 @@ import './config/passport'
 
 import { userTypeDefs as typeDefs } from './graphql/typeDefs';
 import { resolvers } from './graphql/resolvers';
-
+import {verifyAccountHandler} from './domain/users/controllers/verifyAccountHandler'
 dotenv.config({path: '.env.development'});
 
 async function startServer() {
@@ -38,6 +38,8 @@ async function startServer() {
       });
     },
   }));
+
+  app.get('/verify-account', verifyAccountHandler);
 
   app.get('/', (_req, res) => {
     res.send('🚀 Server is running! Visit /graphql');

@@ -47,6 +47,7 @@ export const userResolvers= {
       
       //Step7: Create login token(valid for 7days)
       const token = jwt.sign({ id: user.id }, SECRET, { expiresIn: '7d' });
+      console.log('✅ verificationToken:', verificationToken);
 
       // result
       return {
