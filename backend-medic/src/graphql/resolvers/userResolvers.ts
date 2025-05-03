@@ -25,6 +25,13 @@ export const userResolvers= {
       if(existingUser){
         throw new Error('Email is already in use')
       }
+
+      // ✅ Check username
+      const existingUsername = await User.findOne({ username });
+      if (existingUsername) {
+      throw new Error('Username is already in use');
+      }
+      
      //Step3: hashedPassword
       const hashedPassword = await bcrypt.hash(password, 10);
 
