@@ -1,5 +1,6 @@
 import { User } from '../../domain/users/models/user.model'; 
 import { signupSchema } from '../../domain/users/validation/userValidation';
+import { sendPasswordResetEmail } from '../../utils/sendPasswordResetEmail';
 import { sendVerificationEmail } from '../../utils/sendVerificationEmail';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
@@ -83,6 +84,22 @@ export const userResolvers= {
         token,
         user,
       };
+    },
+    forgotPassword:async (_:any, args: {email: string})=>{
+      const {email}=args;
+
+      const user= await User.findOne({email});
+      if(!user){
+        throw new Error ('User with this email does not exist')
+      }
+
+      const token= jwt.sign(
+        {id:user._id},
+        process.env.JWT_SECRET!,
+        { expiresIn:'1h'}
+      );
+      await sendPasswordResetEmail(user.email,token);
+      return 'Password reset email sent!';
     }
   },
 };

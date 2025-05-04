@@ -9,7 +9,7 @@ const transporter= nodemailer.createTransport({
 });
 
 export const sendPasswordResetEmail=async (email:string, token:string)=>{
-    const resetUrl='http://localhost:3000/reset-password?token=${token}';
+    const resetUrl=`http://localhost:3000/reset-password?token=${token}‍`;
     const mailOptions={
         from: '"Medic App" <no-reply@medic.com>',
         to:email,
