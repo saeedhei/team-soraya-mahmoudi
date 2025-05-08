@@ -24,4 +24,13 @@ useEffect(
             });
         }
     },[]);
+
+    return(
+        <div>
+            <h1>Email Verification</h1>
+            {status ? <p>{status}</p> : <p>Verifying your email...</p>}
+        </div>
+    );
 }
+
+export default VerifyEmailPage;
