@@ -31,9 +31,9 @@ useEffect(
     },[]);
 
     return(
-        <div>
-            <h1>Email Verification</h1>
-            {isLoading? <p>Loading...</p>: <p>{status}</p>}
+        <div className='max-w-md mx-auto p-6 bg-white rounded-lg shadow-md'>
+            <h1 className='text-2xl font-bold mb-4'>Email Verification</h1>
+            {isLoading? <p className='text-center text-gray-500'>Loading...</p>: <p className='text-center text-gray-500'>{status}</p>}
         </div>
     );
 }
