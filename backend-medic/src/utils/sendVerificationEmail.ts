@@ -8,7 +8,7 @@ const transporter = nodemailer.createTransport({
 });
 
 export const sendVerificationEmail=async(email:string, token:string)=>{
-const verificationUrl=`http://localhost:3333/verify?token=${token}`;
+const verificationUrl=`http://localhost:3000/verify?token=${token}`;
  
 const mailOptions={
     from: 'Medic App <no-reply@medic.com>',
