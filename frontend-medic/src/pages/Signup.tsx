@@ -1,5 +1,7 @@
 import { useForm } from "react-hook-form";
 import PublicLayout from "@/layouts/PublicLayout";
+import {useMutation} from "@/apollo/client"
+import {gql} from "graphql-tag";
 
 interface SignupFormValues {
   name: string;
@@ -7,6 +9,17 @@ interface SignupFormValues {
   password: string;
 }
 
+const SIGNUP_MUTATION= gql`
+  mutation Signup($name:String!, $email:String!, $password:String!){
+    signup(username:$name, email:$email, password:$password){
+      token
+      user{
+        id
+        username
+      }
+    }
+  }
+`;
 export default function Signup() {
   const {
     register,
@@ -14,9 +27,31 @@ export default function Signup() {
     formState: { errors, isSubmitting },
   } = useForm<SignupFormValues>();
 
+  const [signup]= useMutation(SIGNUP_MUTATION);
+  const [status, setStatus] = useState<string | null>(null);
+  
   const onSubmit = async (data: SignupFormValues) => {
     console.log("Signup Data:", data);
-    // اینجا بعداً Mutation ثبت نام GraphQL رو صدا میزنیم
+
+    try{
+      const response= await signup({
+        variables:{
+          name:data.name,
+          email:data.email,
+          password:data.password,
+        },
+      });
+      console.log("Signup Data:", response.data);
+      setStatus("Signup successful!");
+      const { token, user } = response.data.signup;
+      localStorage.setItem("token", token);
+      localStorage.setItem("user", JSON.stringify(user));
+      window.location.href = "/dashboard";
+
+    }catch(error){
+      console.error("Signup Error:", error);
+      setStatus("Signup failed. Please try again.");
+    }
   };
 
   return (
@@ -74,6 +109,17 @@ export default function Signup() {
               <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>
             )}
           </div>
+
+          {/* Status Message */}
+        {status && (
+          <p
+            className={`mt-2 text-center text-sm ${
+              status === "Signup successful!" ? "text-green-500" : "text-red-500"
+            }`}
+          >
+            {status}
+          </p>
+        )}
 
           {/* Submit Button */}
           <button
