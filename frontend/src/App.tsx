@@ -12,8 +12,10 @@ const App: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handleSearch = async (query: string = '', page: number = 1) => {
+    setIsLoading(true);
     try {
       const response = await CityDataService.searchCities(query, page);
       if (response.data.cities){
@@ -22,11 +24,14 @@ const App: React.FC = () => {
       setCurrentPage(response.data.currentPage);
       setError(null);
       } else {
-        setError('An error occurred while can not finding your City');
+        setError('An error occurred while trying to find your city.');
       }
       } catch (e) {
       console.error(e);
-      // setError('An error occurred while fetching cities. Please try again later.');
+      setError('An error occurred while fetching cities. Please try again later.');
+
+      }finally {
+        setIsLoading(false); // Stop loading
       }
   };
 
@@ -45,7 +50,9 @@ const App: React.FC = () => {
       <AddCity onSearch={() => handleSearch(searchQuery)} />
       {error ? (
         <div className="error-message">{error}</div>
-      ) : (
+      ) : isLoading ?(
+        <p>Loading...</p> 
+      ):(
       <SearchResults
         results={results}
         totalPages={totalPages}

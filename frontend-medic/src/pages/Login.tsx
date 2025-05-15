@@ -1,5 +1,6 @@
 import { useForm } from "react-hook-form";
 import PublicLayout from "@/layouts/PublicLayout";
+import { Token } from "graphql";
 
 interface LoginFormValues {
   email: string;
@@ -15,8 +16,38 @@ export default function Login() {
 
   const onSubmit = async (data: LoginFormValues) => {
     console.log("Login Data:", data);
-    
-  };
+    try{
+      const response=await fetch("http://localhost:3000/graphql",{
+        method:'POST',
+        headers:{"Content-type":"application/json",},
+        body:JSON.stringify({
+          query:`
+          mutation{
+            login(email:"${data.email}",password:"${data.password}"){
+              token
+              user{
+                id
+                username
+              }
+            }
+          }
+          `,
+        })
+      });
+      const responseData= await response.json();
+
+      if(responseData.errors){
+        console.error("Login failed:", responseData.errors);
+      }else{
+        const {token,user}=responseData.data.login;
+        localStorage.setItem("token", token);
+        localStorage.setItem("user", JSON.stringify(user));
+        window.location.href="/dashboard";
+      }
+    }catch(error){
+      console.error("Error during login:", error)
+    }
+  }
 
   return (
     <PublicLayout>
