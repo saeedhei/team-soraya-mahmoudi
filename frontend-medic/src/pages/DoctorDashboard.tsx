@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from "react";
 import {useAuth} from "@/contexts/AuthContext";
-import {gql, useQuery} from "@apollo/client";
+import {gql, useQuery, useMutation} from "@apollo/client";
+import { CONFIRM_APPOINTMENT } from '@/graphql/mutations/appointmentMutations';
 
 const GET_DOCTOR_APPOINTMENTS= gql`
   query GetDoctorAppointments($doctorId: ID!){
@@ -19,8 +20,16 @@ export default function DoctorDashboard(){
     const {loading, error, data}= useQuery(GET_DOCTOR_APPOINTMENTS,{
         variables: {doctorId: user?.id},
     });
-    const handleConfirmAppointment=(appointmentId:string)=>{
-        console.log('Confirming appointment', appointmentId);
+     
+    const [confirmAppointment] = useMutation(CONFIRM_APPOINTMENT);
+
+    const handleConfirmAppointment=async(appointmentId:string)=>{
+       try{
+        await confirmAppointment({variables:{ appointmentId }});
+        console.log('Appointment confirmed');
+       }catch(error){
+        console.error('Error confirming appointment', error);
+       }
     };
     if(loading) return <p>Loading... </p>;
     if(error) return <p> Error: {error.message}</p>;
