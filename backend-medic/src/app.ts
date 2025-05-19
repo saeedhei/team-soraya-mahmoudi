@@ -5,7 +5,7 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
-import passport  from 'passport';
+import passport  from "./config/passport";
 import './config/passport'
 
 import { userTypeDefs as typeDefs } from './graphql/typeDefs';
@@ -31,11 +31,12 @@ async function startServer() {
   app.use('/graphql', 
   expressMiddleware(server,{
     context: async ({ req }) => {
-      return new Promise<{user:any}>((resolve) => {
+        const user=await new Promise<any>((resolve) => {
         passport.authenticate('jwt', { session: false }, (_err:any, user:any) => {
           resolve({ user });
         })(req);
       });
+      return {user};
     },
   }));
 
