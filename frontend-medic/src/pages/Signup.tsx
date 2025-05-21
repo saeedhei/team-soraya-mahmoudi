@@ -2,6 +2,9 @@ import { useForm } from "react-hook-form";
 import PublicLayout from "@/layouts/PublicLayout";
 import { useMutation, gql } from "@apollo/client";
 import React,{useState} from "react";
+import { Navigate } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
+import { redirectToDashboard } from "@/utils/redirectToDashboard";
 
 
 interface SignupFormValues {
@@ -17,11 +20,17 @@ const SIGNUP_MUTATION= gql`
       user{
         id
         username
+        role
       }
     }
   }
 `;
 export default function Signup() {
+  const { user, token } = useAuth();
+
+  if (token && user) {
+    return <Navigate to={redirectToDashboard(user.role)} replace />;
+  }
   const {
     register,
     handleSubmit,
@@ -47,7 +56,7 @@ export default function Signup() {
       const { token, user } = response.data.signup;
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify(user));
-      window.location.href = "/dashboard";
+      window.location.href = redirectToDashboard(user.role);
 
     }catch(error){
       console.error("Signup Error:", error);

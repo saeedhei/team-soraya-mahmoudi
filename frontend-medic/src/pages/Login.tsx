@@ -1,6 +1,9 @@
 import { useForm } from "react-hook-form";
 import PublicLayout from "@/layouts/PublicLayout";
 import { Token } from "graphql";
+import { Navigate } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
+import { redirectToDashboard } from "@/utils/redirectToDashboard";
 
 interface LoginFormValues {
   email: string;
@@ -8,6 +11,10 @@ interface LoginFormValues {
 }
 
 export default function Login() {
+  const { user,token } = useAuth();
+  if (token && user) {
+    return <Navigate to={redirectToDashboard(user.role)} replace />; // یا doctor-dashboard بر اساس نقش
+  }
   const {
     register,
     handleSubmit,
@@ -28,6 +35,7 @@ export default function Login() {
               user{
                 id
                 username
+                role
               }
             }
           }
@@ -42,7 +50,7 @@ export default function Login() {
         const {token,user}=responseData.data.login;
         localStorage.setItem("token", token);
         localStorage.setItem("user", JSON.stringify(user));
-        window.location.href="/dashboard";
+        window.location.href=redirectToDashboard(user.role);
       }
     }catch(error){
       console.error("Error during login:", error)
