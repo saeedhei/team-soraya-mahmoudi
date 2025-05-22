@@ -6,6 +6,9 @@ import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import passport  from "./config/passport";
+import resetPasswordRouter from './routes/resetPassword';
+import verifyAccountRouter from './routes/verifyAccount';
+
 import './config/passport'
 
 import { userTypeDefs as typeDefs } from './graphql/typeDefs';
@@ -39,6 +42,9 @@ async function startServer() {
       return {user};
     },
   }));
+  
+  app.use('/', verifyAccountRouter);
+  app.use('/', resetPasswordRouter);
 
   app.get('/verify-account', verifyAccountHandler);
 
