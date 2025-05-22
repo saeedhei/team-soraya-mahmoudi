@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 const ForgotPasswordPage = () => {
   const [email, setEmail] = useState("");
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -12,17 +12,18 @@ const ForgotPasswordPage = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setMessage(null);
 
     try {
-      const response = await fetch("/api/forgot-password", {
+      const response = await fetch("http://localhost:3000/forgot-password", {
         method: "POST",
         body: JSON.stringify({ email }),
         headers: { "Content-Type": "application/json" },
       });
       const data = await response.json();
-      setMessage(data.message || "An error occurred");
+      setMessage(data.message || "If this email exists, a reset link has been sent.");
     } catch (error) {
-      setMessage("Something went wrong");
+      setMessage("Something went wrong. Please try again.");
     }finally{
       setIsSubmitting(false);
     }
@@ -44,6 +45,7 @@ const ForgotPasswordPage = () => {
               value={email}
               onChange={handleChange}
               placeholder="Enter your email"
+              required
               className="mt-1 block w-full px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 "
             />
           </div>
