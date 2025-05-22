@@ -72,3 +72,4 @@ const ResetPasswordPage = () => {
     </div>
   );
 }
+export default ResetPasswordPage;
