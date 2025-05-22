@@ -12,10 +12,17 @@ export const forgotPasswordHandler=async(req:Request, res:Response)=>{
   
     const user= await User.findOne({email});
     if(!user){
-        return res.status(200).send("If this email exists, a reset link has been sent.")
+        return res.status(200).json({ message: "If this email exists, a reset link has been sent." });
     }
 
     const resetToken= jwt.sign({id:user._id}, process.env.JWT_SECRET!,{expiresIn: '1h'});
-    await sendPasswordResetEmail(user.email, resetToken);
-    return res.status(200).json({ message: 'Password reset email sent!' });
+
+    try{
+        await sendPasswordResetEmail(user.email, resetToken);
+        return res.status(200).json({ message: 'Password reset email sent!' });
+    }catch(error){
+        console.error("Error sending reset email:", error);
+    return res.status(500).json({ message: "Failed to send reset email" });
+    }
+   
 }
