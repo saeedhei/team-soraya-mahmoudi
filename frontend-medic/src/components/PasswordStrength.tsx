@@ -19,7 +19,7 @@ const PasswordStrength= ({password}: PasswordStrengthProps)=>{
     const getColor=(index:number)=>{
         if (passedCount >= tests.length) return "bg-green-500";
         if (passedCount >= index + 1) return "bg-yellow-400";
-        return "bg-red-500";
+        return "bg-white border border-gray-300";
     };
 
     return(
@@ -27,7 +27,7 @@ const PasswordStrength= ({password}: PasswordStrengthProps)=>{
       {tests.map((test, index) => (
         <div
           key={index}
-          className={`w-6 h-6 rounded ${getColor(index)}`}
+          className={`w-6 h-3 rounded-sm ${getColor(index)}`}
           title={test.label}
         ></div>
       ))}

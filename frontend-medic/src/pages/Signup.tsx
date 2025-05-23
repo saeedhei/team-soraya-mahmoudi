@@ -135,7 +135,7 @@ export default function Signup() {
               <p className="text-red-500 text-sm mt-1">{errors.role.message}</p>
             )}
           </div>
-          
+
           {/* Password Field */}
           <div>
             <label htmlFor="password" className="block text-gray-700 mb-2">
@@ -151,6 +151,22 @@ export default function Signup() {
               <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>
             )}
           </div>
+          <PasswordStrength password={passwordValue} />
+           {/* Confirm Password Field */}
+              <div>
+                <label htmlFor="confirmPassword" className="block text-gray-700 mb-2">
+                  Confirm Password
+                </label>
+                <input
+                  id="confirmPassword"
+                  type="password"
+                  {...register("confirmPassword", { required: "Please confirm your password" })}
+                  className="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
+                />
+                {errors.confirmPassword && (
+                  <p className="text-red-500 text-sm mt-1">{errors.confirmPassword.message}</p>
+                )}
+              </div>
 
           {/* Status Message */}
         {status && (

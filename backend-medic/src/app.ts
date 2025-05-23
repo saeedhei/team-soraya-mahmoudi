@@ -11,7 +11,8 @@ import mongoose from 'mongoose';
 import passport  from "./config/passport";
 import resetPasswordRouter from './routes/resetPassword';
 import verifyAccountRouter from './routes/verifyAccount';
-
+import doctorRoutes from './routes/doctorRoutes';
+import appointmentsRoutes from './routes/appointments';
 import './config/passport'
 
 import { userTypeDefs as typeDefs } from './graphql/typeDefs';
@@ -29,7 +30,7 @@ async function startServer() {
     credentials: true,
   };
   app.use(cors(corsOptions));
-  
+
   app.use(bodyParser.json());
   app.use(passport.initialize());
 
@@ -53,6 +54,10 @@ async function startServer() {
   
   app.use('/', verifyAccountRouter);
   app.use('/', resetPasswordRouter);
+
+  app.use('/doctors', doctorRoutes);
+  app.use('/appointments', appointmentsRoutes);
+
 
   app.get('/verify-account', verifyAccountHandler);
 
