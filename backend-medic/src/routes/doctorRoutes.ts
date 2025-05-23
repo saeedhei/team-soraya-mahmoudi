@@ -2,6 +2,7 @@ import express from 'express';
 import { User } from '../domain/users/models/user.model';
 
 const router = express.Router();
+
 router.get('/:doctorId', async (req, res) => {
     try {
       const doctorId = req.params.doctorId;
