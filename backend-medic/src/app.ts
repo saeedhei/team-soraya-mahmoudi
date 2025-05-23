@@ -26,7 +26,7 @@ async function startServer() {
 
   const app = express();
   const corsOptions ={
-    origin: 'http://localhost:5173',  // آدرس فرانت‌اند خودت
+    origin: 'http://localhost:5173',  
     credentials: true,
   };
   app.use(cors(corsOptions));
