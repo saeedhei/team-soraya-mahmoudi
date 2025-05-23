@@ -5,17 +5,24 @@ import React,{useState} from "react";
 import { Navigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { redirectToDashboard } from "@/utils/redirectToDashboard";
-
+import PasswordStrength from "@/components/PasswordStrength";
 
 interface SignupFormValues {
-  name: string;
+  username: string;
   email: string;
   password: string;
+  confirmPassword: string;
+  role: "patient" | "doctor";
 }
 
 const SIGNUP_MUTATION= gql`
-  mutation Signup($name:String!, $email:String!, $password:String!){
-    signup(username:$name, email:$email, password:$password){
+  mutation Signup(
+    $username:String!, 
+    $email:String!, 
+    $password:String!, 
+    $role: String!
+    ){
+    signup(username:$username, email:$email, password:$password, role: $role){
       token
       user{
         id
@@ -34,21 +41,27 @@ export default function Signup() {
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors, isSubmitting },
   } = useForm<SignupFormValues>();
 
   const [signup]= useMutation(SIGNUP_MUTATION);
   const [status, setStatus] = useState<string | null>(null);
-  
+  const passwordValue = watch("password");
+
   const onSubmit = async (data: SignupFormValues) => {
     console.log("Signup Data:", data);
-
+    if (data.password !== data.confirmPassword) {
+      setStatus("Password and Confirm Password do not match!");
+      return;
+    }
     try{
       const response= await signup({
         variables:{
-          name:data.name,
+          username:data.username,
           email:data.email,
           password:data.password,
+          role: data.role,
         },
       });
       console.log("Signup Data:", response.data);
@@ -58,8 +71,8 @@ export default function Signup() {
       localStorage.setItem("user", JSON.stringify(user));
       window.location.href = redirectToDashboard(user.role);
 
-    }catch(error){
-      console.error("Signup Error:", error);
+    }catch(error:any){
+      console.error("Signup Error:", JSON.stringify(error, null, 2));
       setStatus("Signup failed. Please try again.");
     }
   };
@@ -74,17 +87,17 @@ export default function Signup() {
         >
           {/* Name Field */}
           <div>
-            <label htmlFor="name" className="block text-gray-700 mb-2">
-              Name
+            <label htmlFor="username" className="block text-gray-700 mb-2">
+              Username
             </label>
             <input
-              id="name"
+              id="username"
               type="text"
-              {...register("name", { required: "Name is required" })}
+              {...register("username", { required: "Username is required" })}
               className="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
-            {errors.name && (
-              <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>
+            {errors.username && (
+              <p className="text-red-500 text-sm mt-1">{errors.username.message}</p>
             )}
           </div>
 
@@ -103,6 +116,25 @@ export default function Signup() {
               <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
             )}
           </div>
+           
+           {/* Role */}
+          <div>
+            <label className="block text-gray-700 mb-2">Role</label>
+            <select
+              {...register("role", { required: "Role is required" })}
+              className="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
+              defaultValue=""
+            >
+              <option value="" disabled>
+                Select your role
+              </option>
+              <option value="patient">Patient</option>
+              <option value="doctor">Doctor</option>
+            </select>
+            {errors.role && (
+              <p className="text-red-500 text-sm mt-1">{errors.role.message}</p>
+            )}
+          </div>
 
           {/* Password Field */}
           <div>
@@ -119,6 +151,22 @@ export default function Signup() {
               <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>
             )}
           </div>
+          <PasswordStrength password={passwordValue} />
+           {/* Confirm Password Field */}
+              <div>
+                <label htmlFor="confirmPassword" className="block text-gray-700 mb-2">
+                  Confirm Password
+                </label>
+                <input
+                  id="confirmPassword"
+                  type="password"
+                  {...register("confirmPassword", { required: "Please confirm your password" })}
+                  className="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
+                />
+                {errors.confirmPassword && (
+                  <p className="text-red-500 text-sm mt-1">{errors.confirmPassword.message}</p>
+                )}
+              </div>
 
           {/* Status Message */}
         {status && (

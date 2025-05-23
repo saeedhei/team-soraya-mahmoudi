@@ -16,10 +16,13 @@ export const userResolvers= {
     },
 
   Mutation:{
-    signup: async (_:any, args:{username:string, email:string, password:string})=>{
-      //Step 1: Validate input data
+    signup: async (_:any, args:{username:string, email:string, password:string, role:"patient" | "doctor"})=>{
+      try{
+        console.log("Signup args:", args);
+
+         //Step 1: Validate input data
       const validatedData=signupSchema.parse(args);
-      const {username, email, password}= validatedData;
+      const {username, email, password,role}= validatedData;
             
       //Step2: Check is already in use
       const existingUser= await User.findOne({email});
@@ -41,6 +44,7 @@ export const userResolvers= {
         username,
         email,
         password: hashedPassword,
+        role: role ?? 'patient',
       });
 
       //Step5: Create verification token (valid for 1 hour)
@@ -62,6 +66,11 @@ export const userResolvers= {
         token,
         user,
       };
+      }
+      catch (error) {
+        console.error("Signup resolver error:", error);
+        throw error;
+      }
     },
 
     //login mutation

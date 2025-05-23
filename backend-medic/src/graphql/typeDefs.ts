@@ -5,8 +5,9 @@ export const userTypeDefs= gql `
     id:ID!
     username: String!
     email: String!
-    creatAt: String!
-    updateAt: String!
+    role: String!
+    createdAt: String!
+    updatedAt: String!
   }
   type AuthPayload{
     token: String!
@@ -18,7 +19,7 @@ export const userTypeDefs= gql `
   }
 
   type Mutation{
-    signup( username:String!, email:String!, password: String!): AuthPayload!
+    signup( username:String!, email:String!, password: String!,role: String!): AuthPayload!
     login(email:String!, password:String!): AuthPayload!
     forgotPassword(email: String!): String!
   }
