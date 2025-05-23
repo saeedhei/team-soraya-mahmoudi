@@ -9,10 +9,13 @@ import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 
 import passport  from "./config/passport";
-import resetPasswordRouter from './routes/resetPassword';
 import verifyAccountRouter from './routes/verifyAccount';
 import doctorRoutes from './routes/doctorRoutes';
 import appointmentsRoutes from './routes/appointments';
+
+import forgotPasswordRouter from './routes/forgotPassword';
+import resetPasswordRouter from './routes/resetPassword';
+
 import './config/passport'
 
 import { userTypeDefs as typeDefs } from './graphql/typeDefs';
@@ -53,7 +56,11 @@ async function startServer() {
   }));
   
   app.use('/', verifyAccountRouter);
+  app.use('/', forgotPasswordRouter);
   app.use('/', resetPasswordRouter);
+
+
+
 
   app.use('/doctors', doctorRoutes);
   app.use('/appointments', appointmentsRoutes);
