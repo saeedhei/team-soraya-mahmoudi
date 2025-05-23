@@ -8,14 +8,14 @@ import { redirectToDashboard } from "@/utils/redirectToDashboard";
 
 
 interface SignupFormValues {
-  name: string;
+  username: string;
   email: string;
   password: string;
 }
 
 const SIGNUP_MUTATION= gql`
-  mutation Signup($name:String!, $email:String!, $password:String!){
-    signup(username:$name, email:$email, password:$password){
+  mutation Signup($username:String!, $email:String!, $password:String!, $role: String!){
+    signup(username:$username, email:$email, password:$password, role: $role){
       token
       user{
         id
@@ -46,9 +46,10 @@ export default function Signup() {
     try{
       const response= await signup({
         variables:{
-          name:data.name,
+          username:data.username,
           email:data.email,
           password:data.password,
+          role: "patient"
         },
       });
       console.log("Signup Data:", response.data);
@@ -58,8 +59,8 @@ export default function Signup() {
       localStorage.setItem("user", JSON.stringify(user));
       window.location.href = redirectToDashboard(user.role);
 
-    }catch(error){
-      console.error("Signup Error:", error);
+    }catch(error:any){
+      console.error("Signup Error:", JSON.stringify(error, null, 2));
       setStatus("Signup failed. Please try again.");
     }
   };
@@ -74,17 +75,17 @@ export default function Signup() {
         >
           {/* Name Field */}
           <div>
-            <label htmlFor="name" className="block text-gray-700 mb-2">
-              Name
+            <label htmlFor="username" className="block text-gray-700 mb-2">
+              Username
             </label>
             <input
-              id="name"
+              id="username"
               type="text"
-              {...register("name", { required: "Name is required" })}
+              {...register("username", { required: "Username is required" })}
               className="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
-            {errors.name && (
-              <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>
+            {errors.username && (
+              <p className="text-red-500 text-sm mt-1">{errors.username.message}</p>
             )}
           </div>
 
