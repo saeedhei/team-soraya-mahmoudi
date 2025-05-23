@@ -16,7 +16,7 @@ export const userResolvers= {
     },
 
   Mutation:{
-    signup: async (_:any, args:{username:string, email:string, password:string, role?: string})=>{
+    signup: async (_:any, args:{username:string, email:string, password:string, role:"patient" | "doctor"})=>{
       try{
         console.log("Signup args:", args);
 

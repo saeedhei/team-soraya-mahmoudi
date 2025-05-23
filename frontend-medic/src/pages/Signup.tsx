@@ -5,16 +5,23 @@ import React,{useState} from "react";
 import { Navigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { redirectToDashboard } from "@/utils/redirectToDashboard";
-
+import PasswordStrength from "@/components/PasswordStrength";
 
 interface SignupFormValues {
   username: string;
   email: string;
   password: string;
+  confirmPassword: string;
+  role: "patient" | "doctor";
 }
 
 const SIGNUP_MUTATION= gql`
-  mutation Signup($username:String!, $email:String!, $password:String!, $role: String!){
+  mutation Signup(
+    $username:String!, 
+    $email:String!, 
+    $password:String!, 
+    $role: String!
+    ){
     signup(username:$username, email:$email, password:$password, role: $role){
       token
       user{
@@ -34,22 +41,27 @@ export default function Signup() {
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors, isSubmitting },
   } = useForm<SignupFormValues>();
 
   const [signup]= useMutation(SIGNUP_MUTATION);
   const [status, setStatus] = useState<string | null>(null);
-  
+  const passwordValue = watch("password");
+
   const onSubmit = async (data: SignupFormValues) => {
     console.log("Signup Data:", data);
-
+    if (data.password !== data.confirmPassword) {
+      setStatus("Password and Confirm Password do not match!");
+      return;
+    }
     try{
       const response= await signup({
         variables:{
           username:data.username,
           email:data.email,
           password:data.password,
-          role: "patient"
+          role: data.role,
         },
       });
       console.log("Signup Data:", response.data);
@@ -104,7 +116,26 @@ export default function Signup() {
               <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
             )}
           </div>
-
+           
+           {/* Role */}
+          <div>
+            <label className="block text-gray-700 mb-2">Role</label>
+            <select
+              {...register("role", { required: "Role is required" })}
+              className="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
+              defaultValue=""
+            >
+              <option value="" disabled>
+                Select your role
+              </option>
+              <option value="patient">Patient</option>
+              <option value="doctor">Doctor</option>
+            </select>
+            {errors.role && (
+              <p className="text-red-500 text-sm mt-1">{errors.role.message}</p>
+            )}
+          </div>
+          
           {/* Password Field */}
           <div>
             <label htmlFor="password" className="block text-gray-700 mb-2">
