@@ -20,6 +20,6 @@ export const sendPasswordResetEmail=async (email:string, token:string)=>{
         <a href="${resetUrl}">${resetUrl}</a>
         <p>If you didn’t request this, just ignore this email.</p>
       `,
-    }
+    };
     await transporter.sendMail(mailOptions);
-}
+};

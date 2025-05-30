@@ -11,7 +11,7 @@ const options={
     jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
   secretOrKey: process.env.JWT_SECRET,
 
-}
+};
 
 passport.use(
     new JwtStrategy(options, async(jwt_payload: { id: string }, done)=>{
@@ -26,5 +26,5 @@ passport.use(
             return done(err, false);
           }
     })
-)
+);
 export default passport;

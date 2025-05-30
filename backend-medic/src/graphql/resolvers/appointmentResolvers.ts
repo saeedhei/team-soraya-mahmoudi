@@ -5,7 +5,7 @@ export const appointmentResolvers={
         confirmAppointment: async(_:any, {appointmentId}: {appointmentId: string})=>{
             const appointment= await Appointment.findById(appointmentId);
             if(!appointment){
-                throw new Error("Appointment not found")
+                throw new Error("Appointment not found");
             }
 
             appointment.status= "confirmed";
@@ -13,4 +13,4 @@ export const appointmentResolvers={
             return appointment;
         },
     },
-}
+};

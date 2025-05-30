@@ -16,11 +16,11 @@ import appointmentsRoutes from './routes/appointments';
 import forgotPasswordRouter from './routes/forgotPassword';
 import resetPasswordRouter from './routes/resetPassword';
 
-import './config/passport'
+import './config/passport';
 
 import { userTypeDefs as typeDefs } from './graphql/typeDefs';
 import { resolvers } from './graphql/resolvers';
-import {verifyAccountHandler} from './domain/users/controllers/verifyAccountHandler'
+import {verifyAccountHandler} from './domain/users/controllers/verifyAccountHandler';
 
 
 async function startServer() {

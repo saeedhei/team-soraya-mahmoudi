@@ -9,4 +9,4 @@ export const authenticateJwt = (req: Request, res: Response, next: NextFunction)
       req.user = user;
       next();
     })(req, res, next);
-}
+};

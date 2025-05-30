@@ -25,4 +25,4 @@ export const resetPasswordHandler = async (req: Request, res: Response) =>{
     }catch(error){
         return res.status(400).json({ message: "Invalid or expired token" });
     }
-}
+};

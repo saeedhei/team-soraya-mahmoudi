@@ -27,7 +27,7 @@ export const userResolvers= {
       //Step2: Check is already in use
       const existingUser= await User.findOne({email});
       if(existingUser){
-        throw new Error('Email is already in use')
+        throw new Error('Email is already in use');
       }
 
       // ✅ Check username
@@ -52,10 +52,10 @@ export const userResolvers= {
         {id:user._id},
         process.env.JWT_SECRET!,
         {expiresIn:'1h'}
-      )
+      );
 
       //Step6: Send verification email
-      await sendVerificationEmail(user.email,verificationToken)
+      await sendVerificationEmail(user.email,verificationToken);
       
       //Step7: Create login token(valid for 7days)
       const token = jwt.sign({ id: user.id }, SECRET, { expiresIn: '7d' });
@@ -84,7 +84,7 @@ export const userResolvers= {
 
       const isPasswordValid= await bcrypt.compare(password,user.password);
       if(!isPasswordValid){
-        throw new Error('Invalid credentials')
+        throw new Error('Invalid credentials');
       } 
 
       const token= jwt.sign({ id:user.id}, SECRET, {expiresIn: '7d'});
@@ -99,7 +99,7 @@ export const userResolvers= {
 
       const user= await User.findOne({email});
       if(!user){
-        throw new Error ('User with this email does not exist')
+        throw new Error ('User with this email does not exist');
       }
 
       const token= jwt.sign(

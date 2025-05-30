@@ -1,4 +1,4 @@
-import {User} from "../models/user.model"
+import {User} from "../models/user.model";
 import { sendPasswordResetEmail } from "../../../utils/sendPasswordResetEmail";
 import jwt from 'jsonwebtoken';
 import { Request, Response } from 'express';
@@ -25,4 +25,4 @@ export const forgotPasswordHandler=async(req:Request, res:Response)=>{
     return res.status(500).json({ message: "Failed to send reset email" });
     }
    
-}
+};
