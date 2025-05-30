@@ -3,35 +3,21 @@ import { gql } from 'graphql-tag';
 export const userTypeDefs = gql`
   type User {
     id: ID!
-    userName: String!
+    username: String!
     email: String!
-    firstName: String!
-    lastName: String!
-    phoneNumber: String
-    role: String!
-    languagePreferences: String!
-    learningProgress: [LearningProgress!]!
   }
 
-  type LearningProgress {
-    cardId: ID!
-    status: String!
+  type AuthPayload {
+    token: String!
+    user: User!
   }
 
   type Query {
-    getUser(id: ID!): User
-    getUsers: [User!]!
+    me: User
   }
 
   type Mutation {
-    createUser(
-      userName: String!
-      email: String!
-      firstName: String!
-      lastName: String!
-      password: String!
-      role: String!
-      languagePreferences: String!
-    ): User!
+    register(username: String!, email: String!, password: String!): AuthPayload!
+    login(email: String!, password: String!): AuthPayload!
   }
 `;

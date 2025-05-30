@@ -1,15 +1,27 @@
-// import { mergeTypeDefs, mergeResolvers } from '@graphql-tools/merge';
-// import { typeDefs as userTypeDefs } from '../domain/users/presentation/userSchema.js';
-// import { resolvers as userResolvers } from '../domain/users/presentation/userResolvers.js';
+import { gql } from "graphql-tag";
 
-// import { typeDefs as productTypeDefs } from "../products/presentation/productSchema";
-// import { resolvers as productResolvers } from "../products/presentation/productResolvers";
+export const userTypeDefs= gql `
+  type User{
+    id:ID!
+    username: String!
+    email: String!
+    role: String!
+    createdAt: String!
+    updatedAt: String!
+  }
+  type AuthPayload{
+    token: String!
+    user: User!
+  }
 
-// export const typeDefs = mergeTypeDefs([userTypeDefs]);
-// export const resolvers = mergeResolvers([userResolvers]);
+  type Query{
+    me: User!
+  }
 
-import { mergeTypeDefs } from '@graphql-tools/merge';
-import { userTypeDefs } from '../domain/users/presentation/userSchema.js';
-import { cardTypeDefs } from '../domain/cards/presentation/cardSchema.js';
-
-export const typeDefs = mergeTypeDefs([userTypeDefs, cardTypeDefs]);
+  type Mutation{
+    signup( username:String!, email:String!, password: String!,role: String!): AuthPayload!
+    login(email:String!, password:String!): AuthPayload!
+    forgotPassword(email: String!): String!
+  }
+`
+;
