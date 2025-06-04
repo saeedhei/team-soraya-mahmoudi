@@ -1,5 +1,5 @@
 import express from "express";
-import { Appointment } from "../modules/user/models/appointment.model";
+import { Appointment } from "../modules/appointment/models/appointment.model";
 
 const router = express.Router();
 

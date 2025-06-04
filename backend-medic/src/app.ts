@@ -19,7 +19,12 @@ import resetPasswordRouter from "./routes/resetPassword";
 import "./config/passport";
 
 import { typeDefs, resolvers } from "./graphql";
+import { ExpressContextFunctionArgument } from '@apollo/server/express4';
 import { verifyAccountHandler } from "./modules/user/controllers/verifyAccountHandler";
+
+interface MyContext {
+  user: any;
+}
 
 async function startServer() {
   await mongoose.connect(process.env.MONGODB_URI!);
@@ -35,7 +40,7 @@ async function startServer() {
   app.use(bodyParser.json());
   app.use(passport.initialize());
 
-  const server = new ApolloServer({
+  const server = new ApolloServer<MyContext>({
     typeDefs,
     resolvers,
   });
@@ -44,13 +49,13 @@ async function startServer() {
   app.use(
     "/graphql",
     expressMiddleware(server, {
-      context: async ({ req }) => {
+      context: async ({ req }:ExpressContextFunctionArgument): Promise<MyContext> => {
         const user = await new Promise<any>((resolve) => {
           passport.authenticate(
             "jwt",
             { session: false },
             (_err: any, user: any) => {
-              resolve({ user });
+              resolve(user );
             }
           )(req);
         });

@@ -1,7 +1,7 @@
-import { User } from '../../models/user.model';
-import { signupSchema } from '../../validation/userValidation';
-import { sendPasswordResetEmail } from '../../utils/sendPasswordResetEmail';
-import { sendVerificationEmail } from '../../utils/sendVerificationEmail';
+import { User } from '../models/user.model';
+import { signupSchema } from '../validation/userValidation';
+import { sendPasswordResetEmail } from '../utils/sendPasswordResetEmail';
+import { sendVerificationEmail } from '../utils/sendVerificationEmail';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 

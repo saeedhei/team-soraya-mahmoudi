@@ -1,0 +1,58 @@
+# 🧾 Create User – Medic Backend
+
+This document describes how to create a new user in the Medic Backend system, both using GraphQL and (optionally) REST.
+
+---
+
+## ✅ Method 1: GraphQL
+
+### 🔗 Endpoint
+--------------------------
+POST http://localhost:3000/graphql
+
+
+### 📦 Sample GraphQL Mutation
+
+```graphql
+mutation {
+  signup(
+    username: "soraya123"
+    email: "soraya@example.com"
+    password: "StrongPassw0rd!"
+    role: "patient"
+  ) {
+    token
+    user {
+      id
+      username
+      email
+    }
+  }
+}
+✅ Method 2: REST API (Optional / for future)
+⚠️ Currently, the main user creation flow is implemented via GraphQL.
+If needed, you may implement a POST endpoint (e.g., /api/users) to support REST.
+
+🛡️ Password Validation Rules
+The password must meet the following requirements:
+
+Minimum 6 characters
+
+At least one uppercase letter
+
+At least one number
+
+At least one special character (!@#$%^&*, etc.)
+
+If validation fails, the server will respond with an error.
+
+📧 Email Verification
+After a user is successfully created, a verification email is automatically sent to their registered address with a verification token valid for 1 hour.
+
+🧪 Quick Test Using cURL
+
+curl -X POST http://localhost:3000/graphql \
+  -H "Content-Type: application/json" \
+  -d '{
+    "query": "mutation { signup(username: \"soraya123\", email: \"soraya@example.com\", password: \"StrongPassw0rd!\", role: \"patient\") { token user { id username email } } }"
+  }'
