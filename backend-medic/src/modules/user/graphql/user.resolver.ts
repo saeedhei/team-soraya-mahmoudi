@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { User } from '../models/user.model';
 import { signupSchema } from '../validation/userValidation';
 import { sendPasswordResetEmail } from '../utils/sendPasswordResetEmail';

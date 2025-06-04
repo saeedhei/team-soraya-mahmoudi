@@ -22,7 +22,7 @@ export const resetPasswordHandler = async (req: Request, res: Response) =>{
         await user.save();
         return res.status(200).json({ message: "Password has been reset successfully" });
 
-    }catch(error){
+    }catch{
         return res.status(400).json({ message: "Invalid or expired token" });
     }
 }
