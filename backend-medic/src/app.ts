@@ -18,8 +18,7 @@ import resetPasswordRouter from "./routes/resetPassword";
 
 import "./config/passport";
 
-import { userTypeDefs as typeDefs } from "./graphql/typeDefs";
-import { resolvers } from "./graphql/resolvers";
+import { typeDefs, resolvers } from "./graphql";
 import { verifyAccountHandler } from "./modules/user/controllers/verifyAccountHandler";
 
 async function startServer() {
