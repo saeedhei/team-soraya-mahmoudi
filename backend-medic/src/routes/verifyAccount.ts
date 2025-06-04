@@ -1,7 +1,7 @@
-import express from 'express';
-import { verifyAccountHandler } from '../domain/users/controllers/verifyAccountHandler';
+import express from "express";
+import { verifyAccountHandler } from "../modules/user/controllers/verifyAccountHandler";
 
-const router=express.Router();
+const router = express.Router();
 
-router.get('/verify',verifyAccountHandler);
+router.get("/verify", verifyAccountHandler);
 export default router;
