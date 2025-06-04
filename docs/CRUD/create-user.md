@@ -56,3 +56,41 @@ curl -X POST http://localhost:3000/graphql \
   -d '{
     "query": "mutation { signup(username: \"soraya123\", email: \"soraya@example.com\", password: \"StrongPassw0rd!\", role: \"patient\") { token user { id username email } } }"
   }'
+
+  ---------------------
+  ## ♻️ Update User – GraphQL
+
+### 🔗 Endpoint
+POST http://localhost:3000/graphql
+
+### 📦 Sample Mutation
+
+```graphql
+mutation {
+  updateUser(
+    id: "USER_ID_HERE"
+    username: "soraya_updated"
+    email: "newemail@example.com"
+  ) {
+    id
+    username
+    email
+  }
+}
+-----------------
+📌 This mutation updates a user's profile. You can update the username, email, or other editable fields.
+Make sure the user is authenticated and authorized.
+
+❌ Delete User – GraphQL
+🔗 Endpoint
+POST http://localhost:3000/graphql
+
+--Sample Mutation
+mutation {
+  deleteUser(id: "USER_ID_HERE") {
+    message
+  }
+}
+This mutation deletes the user account with the given id.
+
+⚠️ Deletion is irreversible. Use with caution. Make sure only authorized users (like admins or the owner) can perform this action.
