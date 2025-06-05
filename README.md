@@ -24,3 +24,4 @@ The app features both **public and private pages**, with a full **authentication
 3. [Queries & Mutations](./queries-and-mutations.md)
 4. [Using Apollo Client with React](./apollo-client-react.md)
 5. [Advanced Features](./advanced-features.md)
+
