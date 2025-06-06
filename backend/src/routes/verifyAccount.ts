@@ -1,5 +1,5 @@
 import express from 'express';
-import { verifyAccountHandler } from '../domain/users/controllers/verifyAccountHandler';
+import { verifyAccountHandler } from '../modules/user/controllers/verifyAccountHandler';
 
 const router=express.Router();
 

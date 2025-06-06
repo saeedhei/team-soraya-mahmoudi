@@ -1,13 +1,13 @@
-import {Schema, model,models} from "mongoose";
+
+import {Schema, model} from "mongoose";
 
 const appointmentSchema = new Schema(
     {
         doctor:{ type: Schema.Types.ObjectId, ref: 'User', required: true},
         patient:{type: Schema.Types.ObjectId, ref: 'User', required: true},
-        date:{type: Date, required: true},
+        data:{type: Date, required: true},
         status:{type: String, enum: ['pending', 'confirmed', 'cancelled'], default: 'pending'},
     },
     {timestamps:true}
 );
-export const Appointment= 
-models.Appointment || model("Appointment", appointmentSchema);
+export const Appointment= model("Appointment", appointmentSchema);
