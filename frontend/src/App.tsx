@@ -6,6 +6,7 @@ import Signup from "@/pages/Signup";
 import PrivateRoute from "@/components/auth/PrivateRoute";
 import DoctorDashboard from "@/pages/DoctorDashboard";
 import PatientDashboard from "@/pages/PatientDashboard";
+import Profile from "@/pages/Profile"; 
 
 export default function App() {
   return (
@@ -17,6 +18,8 @@ export default function App() {
       <Route element={<PrivateRoute />}>
         <Route path="/doctor-dashboard" element={<DoctorDashboard />} />
         <Route path="/patient-dashboard" element={<PatientDashboard />} />
+        <Route path="/profile" element={<Profile />} />
+
       </Route>
     </Routes>
   );
