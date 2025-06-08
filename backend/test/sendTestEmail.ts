@@ -5,6 +5,7 @@ const transporter: Transporter = nodemailer.createTransport({
   host: 'localhost',
   port: 1025,
   secure: false, // no TLS for MailDev
+  ignoreTLS: true,
 });
 
 const mailOptions: SendMailOptions = {

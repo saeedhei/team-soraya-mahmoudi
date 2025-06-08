@@ -10,3 +10,13 @@ export const UPDATE_USER = gql`
     }
   }
 `;
+
+export const CHANGE_PASSWORD= gql`
+
+ mutation ChangePassword($id: ID!, $input: ChangePasswordInput!){
+  changePassword(id: $id, input: $input){
+    success
+    message
+  }
+ }
+`

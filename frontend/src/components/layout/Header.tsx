@@ -20,6 +20,14 @@ export default function Header() {
         {user ? (
           <>
             <span className="text-gray-700">Hi, {user.name}</span>
+            
+            <Link
+              to="/profile"
+              className="text-gray-700 hover:text-blue-600 font-medium"
+            >
+              Edit Profile
+            </Link>
+            
             <button
               onClick={handleLogout}
               className="ml-4 bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700 transition"
