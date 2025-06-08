@@ -1,12 +1,12 @@
 import express from 'express';
-import { Appointment } from "../modules/appointment/models/appointment.model";
+import { Appointment } from '../modules/appointment/models/appointment.model';
 
 const router = express.Router();
 
 router.get('/doctor/:doctorId', async (req, res) => {
   try {
     const doctorId = req.params.doctorId;
-    const appointments = await Appointment.find({ doctor:doctorId });
+    const appointments = await Appointment.find({ doctor: doctorId });
     res.json(appointments);
   } catch (error) {
     res.status(500).json({ message: 'Server error', error });
@@ -16,7 +16,7 @@ router.get('/doctor/:doctorId', async (req, res) => {
 router.get('/patient/:patientId', async (req, res) => {
   try {
     const patientId = req.params.patientId;
-    const appointments = await Appointment.find({ patient:patientId });
+    const appointments = await Appointment.find({ patient: patientId });
     res.json(appointments);
   } catch (error) {
     res.status(500).json({ message: 'Server error', error });

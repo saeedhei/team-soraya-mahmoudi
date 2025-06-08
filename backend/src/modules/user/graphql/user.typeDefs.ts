@@ -14,8 +14,8 @@ export const userTypeDefs = gql`
     token: String!
     user: User!
   }
-  
-  input ChangePasswordInput{
+
+  input ChangePasswordInput {
     currentPassword: String!
     newPassword: String!
   }

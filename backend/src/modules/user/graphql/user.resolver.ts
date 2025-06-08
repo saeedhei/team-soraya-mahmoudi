@@ -23,7 +23,7 @@ export const userResolvers = {
         email: string;
         password: string;
         role: 'patient' | 'doctor';
-      }
+      },
     ) => {
       try {
         const validatedData = signupSchema.parse(args);
@@ -44,11 +44,9 @@ export const userResolvers = {
           role,
         });
 
-        const verificationToken = jwt.sign(
-          { id: user._id },
-          process.env.JWT_SECRET!,
-          { expiresIn: '1h' }
-        );
+        const verificationToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET!, {
+          expiresIn: '1h',
+        });
 
         await sendVerificationEmail(user.email, verificationToken);
 
@@ -99,39 +97,38 @@ export const userResolvers = {
       return 'Password reset email sent!';
     },
 
-    changePassword: async(
-      _:any,
-      args:{
-        id:string;
-        input:{
+    changePassword: async (
+      _: any,
+      args: {
+        id: string;
+        input: {
           currentPassword: string;
           newPassword: string;
-        }
-      }
-    )=>{
-      const {id, input}=args;
-      const {currentPassword,newPassword}=input;
+        };
+      },
+    ) => {
+      const { id, input } = args;
+      const { currentPassword, newPassword } = input;
 
       //1.Find the user
-      const user= await User.findById(id);
-      if(!user) throw new Error("User not found");
+      const user = await User.findById(id);
+      if (!user) throw new Error('User not found');
 
       //2. Check if current password matches
-      const isMatch= await bcrypt.compare(currentPassword, user.password);
-      if(!isMatch) throw new Error("Current password is incorrect");
+      const isMatch = await bcrypt.compare(currentPassword, user.password);
+      if (!isMatch) throw new Error('Current password is incorrect');
 
       //3.Hash new password
-      const hashedPassword =await bcrypt.hash(newPassword,12);
+      const hashedPassword = await bcrypt.hash(newPassword, 12);
 
       //4.Update password
-      user.password=hashedPassword;
+      user.password = hashedPassword;
       await user.save();
 
-      return{
-        success:true,
-        message:"Password changed successfully"
-      }
-
-    }
+      return {
+        success: true,
+        message: 'Password changed successfully',
+      };
+    },
   },
 };
