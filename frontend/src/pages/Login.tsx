@@ -1,6 +1,5 @@
 import { useForm } from "react-hook-form";
 import PublicLayout from "@/layouts/PublicLayout";
-import { Token } from "graphql";
 import { Navigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { redirectToDashboard } from "@/utils/redirectToDashboard";
@@ -12,9 +11,11 @@ interface LoginFormValues {
 
 export default function Login() {
   const { user,token } = useAuth();
+
   if (token && user) {
     return <Navigate to={redirectToDashboard(user.role)} replace />; // یا doctor-dashboard بر اساس نقش
   }
+
   const {
     register,
     handleSubmit,
@@ -23,14 +24,15 @@ export default function Login() {
 
   const onSubmit = async (data: LoginFormValues) => {
     console.log("Login Data:", data);
+
     try{
       const response=await fetch("http://localhost:3000/graphql",{
         method:'POST',
         headers:{"Content-type":"application/json",},
         body:JSON.stringify({
           query:`
-          mutation{
-            login(email:"${data.email}",password:"${data.password}"){
+          mutation Login($email: String!, $password: String!) {
+            login(email: $email, password: $password){
               token
               user{
                 id
@@ -40,12 +42,16 @@ export default function Login() {
             }
           }
           `,
+          variables: {
+            email: data.email,
+            password: data.password,}
         })
       });
       const responseData= await response.json();
 
       if(responseData.errors){
-        console.error("Login failed:", responseData.errors);
+        console.error("Login failed:", JSON.stringify(responseData.errors, null, 2));
+        alert(responseData.errors[0]?.message || "Login failed");
       }else{
         const {token,user}=responseData.data.login;
         localStorage.setItem("token", token);

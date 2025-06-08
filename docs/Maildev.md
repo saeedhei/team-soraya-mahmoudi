@@ -43,5 +43,4 @@ const sendVerificationEmail = async (email, token) => {
 Conclusion
 MailDev is an excellent tool for testing email functionality locally, without sending emails to actual users. It makes development smoother by allowing you to view all outgoing emails within a simple web interface.
 
-vbnet
-Copy code
+
