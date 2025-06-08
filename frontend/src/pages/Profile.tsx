@@ -4,27 +4,45 @@ import PublicLayout from "@/layouts/PublicLayout";
 import { useForm } from "react-hook-form";
 import { useMutation } from "@apollo/client";
 import { UPDATE_USER } from "@/graphql/mutations/userMutations";
+import { CHANGE_PASSWORD } from "@/graphql/mutations/userMutations";
+
 
 
 interface ProfileFormValues {
     username: string;
     email: string;
-    currentPassword?: string;
+  }
+
+  interface PasswordFormValues {
+    currentPassword: string;
     newPassword: string;
-    confirmPassword?:string;
+    confirmPassword: string;
   }
 export default function Profile() {
   const { user, loading, error } = useMe();
+
+  const [updateUser] = useMutation(UPDATE_USER);
+  const [changePassword] = useMutation(CHANGE_PASSWORD);
 
   const {
     register,
     handleSubmit,
     reset,
-    watch,
     formState: { errors, isSubmitting },
   } = useForm<ProfileFormValues>();
 
-  const [updateUser] = useMutation(UPDATE_USER);
+  
+  
+
+  const {
+    register: registerPassword,
+    handleSubmit: handlePasswordSubmit,
+    watch: watchPassword,
+    formState: {
+      errors: passwordErrors,
+      isSubmitting: isPasswordSubmitting
+    }
+  } = useForm<PasswordFormValues>();
 
   useEffect(() => {
     if (user) {
@@ -53,13 +71,28 @@ export default function Profile() {
     }
   };
    
-  const handlePasswordChange= async(formData: ProfileFormValues)=>{
-    console.log("Submitted password form:", formData);
-    alert("Password change submitted!")
-  }
+  const handlePasswordChange= async(formData: PasswordFormValues)=>{
+    try{
+      await changePassword({
+        variables:{
+          id:user.id,
+          input:{
+            currentPassword: formData.currentPassword!,
+            newPassword:formData.newPassword,
+          },
+        },
+      });
+      alert("Password changeed successfully.")
+    }
+    catch (err) {
+      console.error("Password change error:", err);
+      alert("Failed to change password.");
+    }
+    
+  };
+
   if (loading) return <p className="text-center mt-20">Loading...</p>;
   if (error) return <p className="text-red-500 mt-20 text-center">Error: {error.message}</p>;
-
   if (!user) return <p className="text-center mt-20">User not found.</p>;
 
   return (
@@ -107,7 +140,7 @@ export default function Profile() {
 
         {/* Change Password Section */}
         
-        <form onSubmit={handleSubmit(handlePasswordChange)} className="mt-10 border-t pt-10 space-y-4">
+        <form onSubmit={handlePasswordSubmit(handlePasswordChange)} className="mt-10 border-t pt-10 space-y-4">
            <h2 className="text-2xl font-semibold text-gray-800 mb-4">Change Password</h2>
            
             <div>
@@ -115,10 +148,10 @@ export default function Profile() {
               <input
                 type="password"
                 id="currentPassword"
-                {...register("currentPassword",{required: "Current password is required"})}
+                {...registerPassword("currentPassword",{required: "Current password is required"})}
                 className="w-full px-2 py-2 border rounded-xl focus:outline-none focus:ring-blue-500"
               />
-              {errors.currentPassword && (<p className="text-red-500 text-sm">{errors.currentPassword.message}</p>)}
+              {passwordErrors.currentPassword && (<p className="text-red-500 text-sm">{passwordErrors.currentPassword.message}</p>)}
             </div>
 
             <div>
@@ -126,7 +159,7 @@ export default function Profile() {
               <input
                 type="password"
                 id="newPassword"
-                {...register("newPassword",{
+                {...registerPassword("newPassword",{
                   required: "New password is required",
                   minLength:{value:6, message: "Must be at least 6 characters"},
                   pattern:{
@@ -136,7 +169,7 @@ export default function Profile() {
                 })}
                 className="w-full px-4 py-2 rounded-xl focus:outline-none focus:ring-blue-500"
               />
-              {errors.newPassword && <p className="text-red-500 text-sm">{errors.newPassword.message}</p>}
+              {passwordErrors.newPassword && <p className="text-red-500 text-sm">{passwordErrors.newPassword.message}</p>}
             </div>
 
             <div>
@@ -144,22 +177,22 @@ export default function Profile() {
           <input 
            type="password" 
            id="confirmPassword"
-           {...register("confirmPassword",{
+           {...registerPassword("confirmPassword",{
             required: "Please confirm your new password",
-            validate: value => value === watch("newPassword") || "Passwords do not match",
+            validate: value => value === watchPassword("newPassword") || "Passwords do not match",
 
            })}
            className="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
-          {errors.confirmPassword && <p className="text-red-500 text-sm">{errors.confirmPassword.message}</p>}
+          {passwordErrors.confirmPassword && (<p className="text-red-500 text-sm">{passwordErrors.confirmPassword.message}</p>)}
         </div>
          
         <button
             type="submit"
-            disabled={isSubmitting}
+            disabled={isPasswordSubmitting}
             className="w-full bg-green-600 text-white py-2 rounded-xl hover:bg-green-700 transition"
           >
-            {isSubmitting ? "Updating..." : "Change Password"}
+            {isPasswordSubmitting ? "Updating..." : "Change Password"}
         </button>
            </form>
         
