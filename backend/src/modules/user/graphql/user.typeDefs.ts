@@ -14,6 +14,16 @@ export const userTypeDefs = gql`
     token: String!
     user: User!
   }
+  
+  input ChangePasswordInput{
+    currentPassword: String!
+    newPassword: String!
+  }
+
+  type ChangePasswordPayload {
+    success: Boolean!
+    message: String!
+  }
 
   type Query {
     me: User!
@@ -23,5 +33,6 @@ export const userTypeDefs = gql`
     signup(username: String!, email: String!, password: String!, role: String!): AuthPayload!
     login(email: String!, password: String!): AuthPayload!
     forgotPassword(email: String!): String!
+    changePassword(id: ID!, input: ChangePasswordInput!): ChangePasswordPayload!
   }
 `;
