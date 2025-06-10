@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import PublicLayout from "@/layouts/PublicLayout";
 import { useMutation, gql } from "@apollo/client";
-import React,{useState} from "react";
+import { useState } from "react";
 import { Navigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { redirectToDashboard } from "@/utils/redirectToDashboard";
@@ -15,16 +15,21 @@ interface SignupFormValues {
   role: "patient" | "doctor";
 }
 
-const SIGNUP_MUTATION= gql`
+const SIGNUP_MUTATION = gql`
   mutation Signup(
-    $username:String!, 
-    $email:String!, 
-    $password:String!, 
+    $username: String!
+    $email: String!
+    $password: String!
     $role: String!
-    ){
-    signup(username:$username, email:$email, password:$password, role: $role){
+  ) {
+    signup(
+      username: $username
+      email: $email
+      password: $password
+      role: $role
+    ) {
       token
-      user{
+      user {
         id
         username
         role
@@ -45,7 +50,7 @@ export default function Signup() {
     formState: { errors, isSubmitting },
   } = useForm<SignupFormValues>();
 
-  const [signup]= useMutation(SIGNUP_MUTATION);
+  const [signup] = useMutation(SIGNUP_MUTATION);
   const [status, setStatus] = useState<string | null>(null);
   const passwordValue = watch("password");
 
@@ -55,12 +60,12 @@ export default function Signup() {
       setStatus("Password and Confirm Password do not match!");
       return;
     }
-    try{
-      const response= await signup({
-        variables:{
-          username:data.username,
-          email:data.email,
-          password:data.password,
+    try {
+      const response = await signup({
+        variables: {
+          username: data.username,
+          email: data.email,
+          password: data.password,
           role: data.role,
         },
       });
@@ -70,8 +75,7 @@ export default function Signup() {
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify(user));
       window.location.href = redirectToDashboard(user.role);
-
-    }catch(error:any){
+    } catch (error: any) {
       console.error("Signup Error:", JSON.stringify(error, null, 2));
       setStatus("Signup failed. Please try again.");
     }
@@ -80,7 +84,9 @@ export default function Signup() {
   return (
     <PublicLayout>
       <section className="max-w-md mx-auto py-20">
-        <h1 className="text-3xl font-bold text-center text-blue-600 mb-8">Signup</h1>
+        <h1 className="text-3xl font-bold text-center text-blue-600 mb-8">
+          Signup
+        </h1>
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="bg-white shadow-md rounded-2xl p-8 space-y-6"
@@ -97,7 +103,9 @@ export default function Signup() {
               className="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
             {errors.username && (
-              <p className="text-red-500 text-sm mt-1">{errors.username.message}</p>
+              <p className="text-red-500 text-sm mt-1">
+                {errors.username.message}
+              </p>
             )}
           </div>
 
@@ -113,11 +121,13 @@ export default function Signup() {
               className="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
             {errors.email && (
-              <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
+              <p className="text-red-500 text-sm mt-1">
+                {errors.email.message}
+              </p>
             )}
           </div>
-           
-           {/* Role */}
+
+          {/* Role */}
           <div>
             <label className="block text-gray-700 mb-2">Role</label>
             <select
@@ -148,36 +158,47 @@ export default function Signup() {
               className="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
             {errors.password && (
-              <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>
+              <p className="text-red-500 text-sm mt-1">
+                {errors.password.message}
+              </p>
             )}
           </div>
           <PasswordStrength password={passwordValue} />
-           {/* Confirm Password Field */}
-              <div>
-                <label htmlFor="confirmPassword" className="block text-gray-700 mb-2">
-                  Confirm Password
-                </label>
-                <input
-                  id="confirmPassword"
-                  type="password"
-                  {...register("confirmPassword", { required: "Please confirm your password" })}
-                  className="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
-                />
-                {errors.confirmPassword && (
-                  <p className="text-red-500 text-sm mt-1">{errors.confirmPassword.message}</p>
-                )}
-              </div>
+          {/* Confirm Password Field */}
+          <div>
+            <label
+              htmlFor="confirmPassword"
+              className="block text-gray-700 mb-2"
+            >
+              Confirm Password
+            </label>
+            <input
+              id="confirmPassword"
+              type="password"
+              {...register("confirmPassword", {
+                required: "Please confirm your password",
+              })}
+              className="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
+            />
+            {errors.confirmPassword && (
+              <p className="text-red-500 text-sm mt-1">
+                {errors.confirmPassword.message}
+              </p>
+            )}
+          </div>
 
           {/* Status Message */}
-        {status && (
-          <p
-            className={`mt-2 text-center text-sm ${
-              status === "Signup successful!" ? "text-green-500" : "text-red-500"
-            }`}
-          >
-            {status}
-          </p>
-        )}
+          {status && (
+            <p
+              className={`mt-2 text-center text-sm ${
+                status === "Signup successful!"
+                  ? "text-green-500"
+                  : "text-red-500"
+              }`}
+            >
+              {status}
+            </p>
+          )}
 
           {/* Submit Button */}
           <button

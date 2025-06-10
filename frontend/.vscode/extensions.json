@@ -1,0 +1,9 @@
+{
+  "recommendations": [
+    "dbaeumer.vscode-eslint",          // ESLint integration
+    "esbenp.prettier-vscode",          // Prettier for formatting
+    "bradlc.vscode-tailwindcss",       // Tailwind IntelliSense 
+    "ms-vscode.vscode-typescript-next", // TypeScript support
+    "dsznajder.es7-react-js-snippets"  // React/Redux snippets
+  ]
+}
