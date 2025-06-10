@@ -13,11 +13,12 @@ import appointmentsRoutes from './routes/appointments';
 import forgotPasswordRouter from './routes/forgotPassword';
 import resetPasswordRouter from './routes/resetPassword';
 import { verifyAccountHandler } from './modules/user/controllers/verifyAccountHandler';
+import { transporter } from './utils/mailer';
 
 const app = express();
 
 const corsOptions = {
-  origin: 'http://localhost:5173',
+  // origin: 'http://localhost:5173',
   credentials: true,
 };
 app.use(cors(corsOptions));
@@ -58,6 +59,15 @@ app.get('/verify-account', verifyAccountHandler);
 
 app.get('/', (_req, res) => {
   res.send('🚀 Server is running! Visit /graphql');
+});
+
+app.get('/health', async (_req, res) => {
+  try {
+    await transporter.verify();
+    res.status(200).send('✅ OK - Mail server is reachable');
+  } catch {
+    res.status(500).send('Mail server is NOT reachable');
+  }
 });
 
 export { app, initApollo };

@@ -1,11 +1,4 @@
-import nodemailer from 'nodemailer';
-
-const transporter = nodemailer.createTransport({
-  host: 'host.docker.internal',
-  port: 1025,
-  secure: false,
-  ignoreTLS: true,
-});
+import { transporter } from '../../../utils/mailer';
 
 export const sendVerificationEmail = async (email: string, token: string) => {
   const verificationUrl = `http://localhost:3000/verify?token=${token}`;
