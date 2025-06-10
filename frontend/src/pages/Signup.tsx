@@ -39,10 +39,6 @@ const SIGNUP_MUTATION = gql`
 `;
 export default function Signup() {
   const { user, token } = useAuth();
-
-  if (token && user) {
-    return <Navigate to={redirectToDashboard(user.role)} replace />;
-  }
   const {
     register,
     handleSubmit,
@@ -53,6 +49,10 @@ export default function Signup() {
   const [signup] = useMutation(SIGNUP_MUTATION);
   const [status, setStatus] = useState<string | null>(null);
   const passwordValue = watch("password");
+
+  if (token && user) {
+    return <Navigate to={redirectToDashboard(user.role)} replace />;
+  }
 
   const onSubmit = async (data: SignupFormValues) => {
     console.log("Signup Data:", data);

@@ -12,26 +12,25 @@ const ResetPasswordPage = () => {
   const params = new URLSearchParams(location.search);
   const token = params.get("token");
 
-  const handleSubmit = async (e: React.FormEvent) =>{
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!token) {
-        setMessage("Invalid or missing token");
-        return;
-      }
+      setMessage("Invalid or missing token");
+      return;
+    }
 
     setIsSubmitting(true);
     setMessage(null);
 
-    try{
-
-        const response = await fetch("http://localhost:3000/reset-password", {
+    try {
+      const response = await fetch("http://localhost:3000/reset-password", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ token, newPassword }),
       });
       const data = await response.json();
-       
+
       if (response.ok) {
         setMessage(data.message);
         setTimeout(() => {
@@ -40,13 +39,12 @@ const ResetPasswordPage = () => {
       } else {
         setMessage(data.message || "Failed to reset password");
       }
-
-    }catch(error){
-        setMessage("Something went wrong");
-    }finally{
-        setIsSubmitting(false);
+    } catch (error) {
+      setMessage("Something went wrong");
+    } finally {
+      setIsSubmitting(false);
     }
-  }
+  };
   return (
     <div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-md mt-20">
       <h2 className="text-2xl font-bold mb-4">Reset Password</h2>
@@ -71,5 +69,5 @@ const ResetPasswordPage = () => {
       {message && <p className="mt-4 text-center text-gray-700">{message}</p>}
     </div>
   );
-}
+};
 export default ResetPasswordPage;

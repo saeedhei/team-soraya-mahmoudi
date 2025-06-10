@@ -1,5 +1,3 @@
-import React from "react";
-
 const specialties = [
   { id: 1, name: "Cardiologist", icon: "🫀" },
   { id: 2, name: "Dermatologist", icon: "🧴" },
