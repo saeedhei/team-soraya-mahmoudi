@@ -1,9 +1,32 @@
 {
   "recommendations": [
-    "dbaeumer.vscode-eslint",          // ESLint integration
-    "esbenp.prettier-vscode",          // Prettier for formatting
-    "bradlc.vscode-tailwindcss",       // Tailwind IntelliSense 
-    "ms-vscode.vscode-typescript-next", // TypeScript support
-    "dsznajder.es7-react-js-snippets"  // React/Redux snippets
+    // === Core Essentials ===
+    "dbaeumer.vscode-eslint",               // ESLint (must-have for linting)
+    "esbenp.prettier-vscode",               // Prettier (auto-formatting)
+    "ms-vscode.vscode-typescript-next",     // Latest TypeScript support
+
+    // === React & TypeScript ===
+    "infeng.vscode-react-typescript",       // Better TSX snippets (replaces ES7 Snippets)
+    "pmneo.tsimporter",                    // Smart TypeScript auto-imports
+    "aaron-bond.better-comments",           // Color-coded comments (e.g., TODO, FIXME)
+
+    // === Styling (Tailwind/CSS) ===
+    "bradlc.vscode-tailwindcss",            // Tailwind IntelliSense (if using Tailwind)
+    "naumovs.color-highlight",              // Visualize colors in code
+
+    // === Error & Performance ===
+    "usernamehw.errorlens",                 // Inline error highlights
+    "wix.vscode-import-cost",               // Shows import bundle size
+    "streetsidesoftware.code-spell-checker", // Spell-check for code/comments
+
+    // === Productivity Boosters ===
+    "visualstudioexptteam.vscodeintellicode", // AI-assisted completions
+    "eamodio.gitlens",                      // Git superpowers (blame, history)
+    "mikestead.dotenv",                     // .env file syntax highlighting
+
+    // === Optional (Advanced) ===
+    "orta.vscode-jest",                     // Jest testing (if using Jest)
+    "csstools.postcss",                     // PostCSS support (if needed)
+    "ms-azuretools.vscode-docker"           // Docker (if using containers)
   ]
 }

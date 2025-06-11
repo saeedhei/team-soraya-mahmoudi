@@ -1,6 +1,6 @@
-import { useAuth } from "@/contexts/AuthContext";
-import { gql, useQuery, useMutation } from "@apollo/client";
-import { CONFIRM_APPOINTMENT } from "@/graphql/mutations/appointmentMutations";
+import { useAuth } from '@/contexts/AuthContext';
+import { gql, useQuery, useMutation } from '@apollo/client';
+import { CONFIRM_APPOINTMENT } from '@/graphql/mutations/appointmentMutations';
 
 const GET_DOCTOR_APPOINTMENTS = gql`
   query GetDoctorAppointments($doctorId: ID!) {
@@ -25,9 +25,9 @@ export default function DoctorDashboard() {
   const handleConfirmAppointment = async (appointmentId: string) => {
     try {
       await confirmAppointment({ variables: { appointmentId } });
-      console.log("Appointment confirmed");
+      console.log('Appointment confirmed');
     } catch (error) {
-      console.error("Error confirming appointment", error);
+      console.error('Error confirming appointment', error);
     }
   };
   if (loading) return <p>Loading... </p>;
@@ -43,24 +43,16 @@ export default function DoctorDashboard() {
         ) : (
           <ul>
             {data.getAppointmentsForDoctor.map((appointment: any) => (
-              <li
-                key={appointment.id}
-                className="bg-white p-4 rounded-lg shadow-md mb-4"
-              >
-                <p className="text-xl font-semibold">
-                  {appointment.patientName}
-                </p>
+              <li key={appointment.id} className="bg-white p-4 rounded-lg shadow-md mb-4">
+                <p className="text-xl font-semibold">{appointment.patientName}</p>
                 <p className="text-gray-600">{appointment.specialty}</p>
                 <p className="text-gray-500">Date: {appointment.date}</p>
                 <p
                   className={`text-sm mt-2 ${
-                    appointment.status === "confirmed"
-                      ? "text-green-500"
-                      : "text-yellow-500"
+                    appointment.status === 'confirmed' ? 'text-green-500' : 'text-yellow-500'
                   }`}
                 >
-                  Status:{" "}
-                  {appointment.status === "confirmed" ? "Confirmed" : "Pending"}
+                  Status: {appointment.status === 'confirmed' ? 'Confirmed' : 'Pending'}
                 </p>
                 <button
                   onClick={() => handleConfirmAppointment(appointment.id)}
