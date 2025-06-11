@@ -1,5 +1,5 @@
-import { useAuth } from "@/contexts/AuthContext";
-import { gql, useQuery } from "@apollo/client";
+import { useAuth } from '@/contexts/AuthContext';
+import { gql, useQuery } from '@apollo/client';
 
 const GET_PATIENT_APPOINTMENTS = gql`
   query GetPatientAppointments($patientId: ID!) {
@@ -32,22 +32,17 @@ export default function PatientDashboard() {
         ) : (
           <ul>
             {data.getAppointments.map((appointment: any) => (
-              <li
-                key={appointment.id}
-                className="bg-white p-4 rounded-lg shadow-md mb-4"
-              >
+              <li key={appointment.id} className="bg-white p-4 rounded-lg shadow-md mb-4">
                 <p className="text-xl font-semibold"></p>
                 <p className="text-gray-600"></p>
                 <p className="text-gray-500"></p>
                 <p
                   className={`text-sm mt-2 ${
-                    appointment.status === "confirmed"
-                      ? "text-green-500"
-                      : "text-yellow-500"
+                    appointment.status === 'confirmed' ? 'text-green-500' : 'text-yellow-500'
                   }`}
                 >
                   Status:
-                  {appointment.status === "confirmed" ? "Confirmed" : "Pending"}
+                  {appointment.status === 'confirmed' ? 'Confirmed' : 'Pending'}
                 </p>
 
                 <button className="mt-4 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition">
