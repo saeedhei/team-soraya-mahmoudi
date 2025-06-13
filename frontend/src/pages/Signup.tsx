@@ -1,11 +1,13 @@
 import { useForm } from "react-hook-form";
 import PublicLayout from "@/layouts/PublicLayout";
-import { useMutation, gql } from "@apollo/client";
+import { useMutation} from "@apollo/client";
 import { useState } from "react";
 import { Navigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { redirectToDashboard } from "@/utils/redirectToDashboard";
 import PasswordStrength from "@/components/PasswordStrength";
+import { SIGNUP_MUTATION } from "@/graphql/mutations/authMutations";
+
 
 interface SignupFormValues {
   username: string;
@@ -15,28 +17,7 @@ interface SignupFormValues {
   role: "patient" | "doctor";
 }
 
-const SIGNUP_MUTATION = gql`
-  mutation Signup(
-    $username: String!
-    $email: String!
-    $password: String!
-    $role: String!
-  ) {
-    signup(
-      username: $username
-      email: $email
-      password: $password
-      role: $role
-    ) {
-      token
-      user {
-        id
-        username
-        role
-      }
-    }
-  }
-`;
+
 export default function Signup() {
   const { user, token } = useAuth();
   const {
@@ -75,12 +56,11 @@ export default function Signup() {
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify(user));
       window.location.href = redirectToDashboard(user.role);
-    } catch (error: any) {
-      console.error("Signup Error:", JSON.stringify(error, null, 2));
+    } catch (error: unknown) {
+      console.error("Signup Error:", error);
       setStatus("Signup failed. Please try again.");
-    }
   };
-
+  }
   return (
     <PublicLayout>
       <section className="max-w-md mx-auto py-20">

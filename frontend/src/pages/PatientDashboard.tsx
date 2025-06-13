@@ -6,7 +6,7 @@ const GET_PATIENT_APPOINTMENTS = gql`
     getAppointments(patientId: $patientId) {
       id
       doctorName
-      speciality
+      specialty
       date
       status
     }
