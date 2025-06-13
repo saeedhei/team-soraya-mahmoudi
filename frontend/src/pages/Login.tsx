@@ -18,7 +18,7 @@ export default function Login() {
   } = useForm<LoginFormValues>();
 
   if (token && user) {
-    return <Navigate to={redirectToDashboard(user.role)} replace />; // یا doctor-dashboard بر اساس نقش
+    return <Navigate to={redirectToDashboard(user.role)} replace />;
   }
 
   const onSubmit = async (data: LoginFormValues) => {
