@@ -1,4 +1,4 @@
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from '@/contexts/useAuth';
 import { gql, useQuery, useMutation } from '@apollo/client';
 import { CONFIRM_APPOINTMENT } from '@/graphql/mutations/appointmentMutations';
 

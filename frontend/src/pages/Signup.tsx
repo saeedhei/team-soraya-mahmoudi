@@ -3,7 +3,7 @@ import PublicLayout from "@/layouts/PublicLayout";
 import { useMutation} from "@apollo/client";
 import { useState } from "react";
 import { Navigate } from "react-router-dom";
-import { useAuth } from "@/contexts/AuthContext";
+import { useAuth } from "@/contexts/useAuth";
 import { redirectToDashboard } from "@/utils/redirectToDashboard";
 import PasswordStrength from "@/components/PasswordStrength";
 import { SIGNUP_MUTATION } from "@/graphql/mutations/authMutations";
@@ -51,11 +51,8 @@ export default function Signup() {
         },
       });
       console.log("Signup Data:", response.data);
-      setStatus("Signup successful!");
-      const { token, user } = response.data.signup;
-      localStorage.setItem("token", token);
-      localStorage.setItem("user", JSON.stringify(user));
-      window.location.href = redirectToDashboard(user.role);
+      setStatus("Signup successful! Please check your email to verify your account.");
+      
     } catch (error: unknown) {
       console.error("Signup Error:", error);
       setStatus("Signup failed. Please try again.");
