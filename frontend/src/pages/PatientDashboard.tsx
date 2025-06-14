@@ -1,4 +1,4 @@
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from '@/contexts/useAuth';
 import { gql, useQuery } from '@apollo/client';
 
 const GET_PATIENT_APPOINTMENTS = gql`
