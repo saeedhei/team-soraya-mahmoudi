@@ -1,4 +1,5 @@
 import { createContext, useState, ReactNode } from "react";
+import { useEffect } from "react";
 
 interface User {
   id: number;
@@ -19,6 +20,16 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(null);
+  
+  useEffect(() => {
+    const storedToken = localStorage.getItem("token");
+    const storedUser = localStorage.getItem("user");
+
+    if (storedToken && storedUser) {
+      setToken(storedToken);
+      setUser(JSON.parse(storedUser));
+    }
+  }, []);
 
   const login = (userData: User, tokenData: string) => {
     setUser(userData);
