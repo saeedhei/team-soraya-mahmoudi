@@ -28,6 +28,7 @@ const ResetPasswordPage = () => {
 
     if (newPassword !== confirmPassword) {
       setMessage('Passwords do not match');
+      setIsSubmitting(false);
       return;
     }
 
