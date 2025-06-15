@@ -1,17 +1,18 @@
+import { Routes, Route } from 'react-router-dom';
+import Home from '@/pages/Home';
+import Login from '@/pages/Login';
+import Signup from '@/pages/Signup';
+import PrivateRoute from '@/components/auth/PrivateRoute';
+import DoctorDashboard from '@/pages/DoctorDashboard';
+import PatientDashboard from '@/pages/PatientDashboard';
+import Profile from '@/pages/Profile';
 
-import { Routes, Route } from "react-router-dom";
-import Home from "@/pages/Home";
-import Login from "@/pages/Login";
-import Signup from "@/pages/Signup";
-import PrivateRoute from "@/components/auth/PrivateRoute";
-import DoctorDashboard from "@/pages/DoctorDashboard";
-import PatientDashboard from "@/pages/PatientDashboard";
-import Profile from "@/pages/Profile"; 
+import DoctorLayout from '@/layouts/DoctorLayout';
+import PatientLayout from '@/layouts/PatientLayout';
+import DoctorAppointments from '@/pages/DoctorAppointments';
+import PatientAppointments from '@/pages/PatientAppointments';
 
-import DoctorLayout from "@/layouts/DoctorLayout";
-import PatientLayout from "@/layouts/PatientLayout";
-import DoctorAppointments from "@/pages/DoctorAppointments";
-import PatientAppointments from "@/pages/PatientAppointments";
+import RoleBasedRoute from '@/components/auth/RoleBasedRoute';
 
 export default function App() {
   return (
@@ -20,21 +21,31 @@ export default function App() {
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
 
-      <Route element={<PrivateRoute />}>
+      <Route element={<RoleBasedRoute allowedRoles={['doctor']} />}>
         <Route path="/doctor-dashboard" element={<DoctorDashboard />} />
+        <Route
+          path="/appointments"
+          element={
+            <DoctorLayout>
+              <DoctorAppointments />
+            </DoctorLayout>
+          }
+        />
+      </Route>
+
+      <Route element={<RoleBasedRoute allowedRoles={['patient']} />}>
         <Route path="/patient-dashboard" element={<PatientDashboard />} />
+        <Route
+          path="/my-appointments"
+          element={
+            <PatientLayout>
+              <PatientAppointments />
+            </PatientLayout>
+          }
+        />
+      </Route>
+      <Route element={<PrivateRoute />}>
         <Route path="/profile" element={<Profile />} />
-        
-        <Route path="/appointments" element={
-          <DoctorLayout>
-            <DoctorAppointments />
-          </DoctorLayout>
-        } />
-        <Route path="/my-appointments" element={
-          <PatientLayout>
-            <PatientAppointments />
-          </PatientLayout>
-        } />
       </Route>
     </Routes>
   );

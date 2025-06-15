@@ -1,8 +1,11 @@
+import PublicLayout from '@/layouts/PublicLayout';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const VerifyEmailPage = () => {
   const [status, setStatus] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const verifyEmail = async () => {
@@ -29,7 +32,7 @@ const VerifyEmailPage = () => {
 
         if (data.message.includes('verified')) {
           setTimeout(() => {
-            window.location.href = '/login';
+            navigate('/login');
           }, 3000);
         }
       } catch (error) {
@@ -42,22 +45,24 @@ const VerifyEmailPage = () => {
   }, []);
 
   return (
-    <div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-md">
-      <h1 className="text-2xl font-bold mb-4 text-center text-blue-600">Email Verification</h1>
-      {isLoading ? (
-        <p className="text-center text-gray-500">Loading...</p>
-      ) : (
-        <p
-          className={`text-center text-sm ${
-            status?.includes('successfully') || status?.includes('verified')
-              ? 'text-green-600'
-              : 'text-red-600'
-          }`}
-        >
-          {status}
-        </p>
-      )}
-    </div>
+    <PublicLayout>
+      <div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-md m20">
+        <h1 className="text-2xl font-bold mb-4 text-center text-blue-600">Email Verification</h1>
+        {isLoading ? (
+          <p className="text-center text-gray-500">Loading...</p>
+        ) : (
+          <p
+            className={`text-center text-sm ${
+              status?.includes('successfully') || status?.toLowerCase().includes('verified')
+                ? 'text-green-600'
+                : 'text-red-600'
+            }`}
+          >
+            {status}
+          </p>
+        )}
+      </div>
+    </PublicLayout>
   );
 };
 
