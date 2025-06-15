@@ -1,5 +1,5 @@
-import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "@/contexts/useAuth";
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '@/contexts/useAuth';
 
 export default function Header() {
   const { user, logout } = useAuth();
@@ -7,7 +7,7 @@ export default function Header() {
 
   const handleLogout = () => {
     logout();
-    navigate("/login", { replace: true });
+    navigate('/login', { replace: true });
   };
 
   return (
@@ -18,12 +18,14 @@ export default function Header() {
       <nav className="space-x-4 flex items-center">
         {user ? (
           <>
-            <span className="text-gray-700">Hi, {user.name}</span>
+            <span className="text-gray-700 flex items-center gap-1">
+              <span role="img" aria-label="user">
+                👤
+              </span>
+              Hi, {user.name}
+            </span>
 
-            <Link
-              to="/profile"
-              className="text-gray-700 hover:text-blue-600 font-medium"
-            >
+            <Link to="/profile" className="text-gray-700 hover:text-blue-600 font-medium">
               Edit Profile
             </Link>
 
