@@ -1,4 +1,6 @@
 import { useForm } from 'react-hook-form';
+import { useQuery } from "@apollo/client";
+import { GET_DOCTORS } from "@/graphql/queries/doctorQueries";
 
 interface AppointmentFormData {
   doctorId: string;
@@ -13,15 +15,25 @@ export default function BookAppointmentPage() {
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<AppointmentFormData>();
+  
+  const { 
+    data: doctorsData, 
+    loading: doctorsLoading, 
+    error: doctorsError 
+  } = useQuery(GET_DOCTORS);
 
   const onSubmit = async (data: AppointmentFormData) => {
     console.log('Submitting appointment:', data);
     // TODO: send to backend via mutation
   };
 
+  if (doctorsLoading) return <p className="text-center py-10">Loading doctors...</p>;
+  if (doctorsError) return <p className="text-center py-10 text-red-500">Error: {doctorsError.message}</p>;
+
   return (
     <section className="max-w-md mx-auto py-20">
       <h1 className="text-3xl font-bold text-blue-600 mb-6 text-center">Book a New Appointment</h1>
+      
 
       <form
         onSubmit={handleSubmit(onSubmit)}
@@ -38,9 +50,11 @@ export default function BookAppointmentPage() {
             className="w-full px-3 py-2 border rounded-xl"
           >
             <option value="">-- Choose a Doctor --</option>
-            {/* TODO: fill with real doctors from backend */}
-            <option value="1">Dr. Amini</option>
-            <option value="2">Dr. Bahrami</option>
+            {doctorsData?.getDoctors.map((doctor: any) => (
+              <option key={doctor.id} value={doctor.id}>
+                {doctor.username} ({doctor.specialization})
+              </option>
+            ))}
           </select>
           {errors.doctorId && (
             <p className="text-red-500 text-sm mt-1">{errors.doctorId.message}</p>
