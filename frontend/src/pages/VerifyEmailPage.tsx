@@ -42,7 +42,7 @@ const VerifyEmailPage = () => {
       }
     };
     verifyEmail();
-  }, []);
+  }, [navigate]);
 
   return (
     <PublicLayout>

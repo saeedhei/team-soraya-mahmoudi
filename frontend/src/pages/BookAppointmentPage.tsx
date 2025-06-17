@@ -1,6 +1,8 @@
 import { useForm } from 'react-hook-form';
-import { useQuery } from "@apollo/client";
-import { GET_DOCTORS } from "@/graphql/queries/doctorQueries";
+import { useQuery } from '@apollo/client';
+import { GET_DOCTORS } from '@/graphql/queries/doctorQueries';
+import { useMutation } from '@apollo/client';
+import { CREATE_APPOINTMENT } from '@/graphql/mutations/appointmentMutations';
 
 interface AppointmentFormData {
   doctorId: string;
@@ -15,25 +17,48 @@ export default function BookAppointmentPage() {
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<AppointmentFormData>();
-  
-  const { 
-    data: doctorsData, 
-    loading: doctorsLoading, 
-    error: doctorsError 
-  } = useQuery(GET_DOCTORS);
+
+  const [createAppointment] = useMutation(CREATE_APPOINTMENT);
+
+  const { data: doctorsData, loading: doctorsLoading, error: doctorsError } = useQuery(GET_DOCTORS);
 
   const onSubmit = async (data: AppointmentFormData) => {
-    console.log('Submitting appointment:', data);
-    // TODO: send to backend via mutation
+    try {
+      const { doctorId, date, notes } = data;
+      const fullDateTime = `${date}T${data.time}`; 
+
+      const response = await createAppointment({
+        variables: {
+          input: {
+            doctorId,
+            date: fullDateTime,
+            notes,
+          },
+        },
+      });
+
+      const { userErrors, appointment } = response.data.createAppointment;
+
+      if (userErrors.length > 0) {
+        alert(userErrors[0].message);
+        return;
+      }
+
+      alert(`Appointment created successfully for ${appointment.date.split('T')[0]} with doctor ID: ${appointment.doctor}`);
+
+    } catch (err) {
+      console.error('Error booking appointment:', err);
+      alert('Something went wrong!');
+    }
   };
 
   if (doctorsLoading) return <p className="text-center py-10">Loading doctors...</p>;
-  if (doctorsError) return <p className="text-center py-10 text-red-500">Error: {doctorsError.message}</p>;
+  if (doctorsError)
+    return <p className="text-center py-10 text-red-500">Error: {doctorsError.message}</p>;
 
   return (
     <section className="max-w-md mx-auto py-20">
       <h1 className="text-3xl font-bold text-blue-600 mb-6 text-center">Book a New Appointment</h1>
-      
 
       <form
         onSubmit={handleSubmit(onSubmit)}
