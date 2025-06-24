@@ -11,7 +11,7 @@ import DoctorLayout from '@/layouts/DoctorLayout';
 import PatientLayout from '@/layouts/PatientLayout';
 import DoctorAppointments from '@/pages/DoctorAppointments';
 import PatientAppointments from '@/pages/PatientAppointments';
-
+import BookAppointmentPage from "@/pages/BookAppointmentPage";
 import RoleBasedRoute from '@/components/auth/RoleBasedRoute';
 
 export default function App() {
@@ -31,6 +31,7 @@ export default function App() {
             </DoctorLayout>
           }
         />
+        
       </Route>
 
       <Route element={<RoleBasedRoute allowedRoles={['patient']} />}>
@@ -43,6 +44,7 @@ export default function App() {
             </PatientLayout>
           }
         />
+        <Route path="/book-appointment" element={<BookAppointmentPage />} />
       </Route>
       <Route element={<PrivateRoute />}>
         <Route path="/profile" element={<Profile />} />

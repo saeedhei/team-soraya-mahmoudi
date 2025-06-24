@@ -11,8 +11,24 @@ export const appointmentTypeDefs = gql`
     createdAt: String!
     updatedAt: String!
   }
-
+  
+  input CreateAppointmentInput {
+    doctorId: ID!
+    date: String!
+    notes: String
+  }
+  
+  type CreateAppointmentPayload {
+    appointment: Appointment
+    userErrors: [UserError!]
+  }
+  
+  type UserError {
+    message: String!
+  }
+  
   type Mutation{
     confirmAppointment(appointmentId: ID!):Appointment!
+    createAppointment(input: CreateAppointmentInput!): CreateAppointmentPayload!
   }
 `;

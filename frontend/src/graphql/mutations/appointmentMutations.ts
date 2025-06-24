@@ -8,3 +8,18 @@ export const CONFIRM_APPOINTMENT = gql`
     }
   }
 `;
+
+export const CREATE_APPOINTMENT = gql`
+  mutation CreateAppointment($input: CreateAppointmentInput!) {
+    createAppointment(input: $input) {
+      userErrors {
+        message
+      }
+      appointment {
+        id
+        date
+        status
+      }
+    }
+  }
+`;
