@@ -12,7 +12,6 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "@apollo/client": "^3.13.8",
     "@apollo/server": "^4.11.3",
     "bcryptjs": "^3.0.2",
     "body-parser": "^1.20.2",
