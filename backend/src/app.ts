@@ -1,66 +1,40 @@
 // src/app.ts
-import express from 'express';
-import { ApolloServer } from '@apollo/server';
-import { expressMiddleware } from '@apollo/server/express4';
+import express, { Request } from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
-import passport from './config/passport';
-import { resolvers, typeDefs } from './graphql';
+import { expressMiddleware } from '@apollo/server/express4';
+import { createApolloServer } from './core/apollo/server';
 
-import verifyAccountRouter from './routes/verifyAccount';
-import doctorRoutes from './routes/doctorRoutes';
-import appointmentsRoutes from './routes/appointments';
-import forgotPasswordRouter from './routes/forgotPassword';
-import resetPasswordRouter from './routes/resetPassword';
-import { verifyAccountHandler } from './modules/user/controllers/verifyAccountHandler';
-import { transporter } from './utils/mailer';
+import passport from 'passport';
+import './core/passport/jwt.strategy';
+
+import { User } from './modules/user/entity/user.entity';
+
+import { transporter } from './core/utils/mailer';
+
+import verifyRoute from './modules/user/routes/verify.route';
+// import verifyAccountRouter from './routes/verifyAccount';
+// import doctorRoutes from './routes/doctorRoutes';
+// import appointmentsRoutes from './routes/appointments';
+// import forgotPasswordRouter from './routes/forgotPassword';
+// import resetPasswordRouter from './routes/resetPassword';
+// import { verifyAccountHandler } from './modules/user/controllers/verifyAccountHandler';
 
 const app = express();
 
-const corsOptions = {
-  origin: 'http://localhost:5173',
-  credentials: true,
-};
-app.use(cors(corsOptions));
+app.use(cors());
 app.use(bodyParser.json());
 app.use(passport.initialize());
 
-const server = new ApolloServer({
-  typeDefs,
-  resolvers,
-});
+app.use('/auth', verifyRoute);
+// app.use('/', verifyAccountRouter);
+// app.use('/', forgotPasswordRouter);
+// app.use('/', resetPasswordRouter);
 
-async function initApollo() {
-  await server.start();
+// app.use('/doctors', doctorRoutes);
+// app.use('/appointments', appointmentsRoutes);
 
-  app.use(
-    '/graphql',
-    expressMiddleware(server, {
-      context: async ({ req }) => {
-        const user = await new Promise<any>((resolve) => {
-          passport.authenticate('jwt', { session: false }, (_err: any, user: any) => {
-            resolve({ user });
-          })(req);
-        });
-        return user;
-      },
-    }),
-  );
-}
-
-app.use('/', verifyAccountRouter);
-app.use('/', forgotPasswordRouter);
-app.use('/', resetPasswordRouter);
-
-app.use('/doctors', doctorRoutes);
-app.use('/appointments', appointmentsRoutes);
-
-app.get('/verify-account', verifyAccountHandler);
-
-app.get('/', (_req, res) => {
-  res.send('🚀 Server is running! Visit /graphql');
-});
-
+// app.get('/verify-account', verifyAccountHandler);
 app.get('/health', async (_req, res) => {
   try {
     await transporter.verify();
@@ -70,4 +44,22 @@ app.get('/health', async (_req, res) => {
   }
 });
 
-export { app, initApollo };
+export async function setupApollo() {
+  const server = await createApolloServer();
+  await server.start();
+
+  app.use(
+    '/graphql',
+    expressMiddleware(server, {
+      context: async ({ req }: { req: Request }) =>
+        new Promise((resolve, reject) => {
+          passport.authenticate('jwt', { session: false }, (err: unknown, user: User | false) => {
+            if (err) return reject(err);
+            resolve({ user: user || null });
+          })(req);
+        }),
+    }),
+  );
+
+  return app;
+}

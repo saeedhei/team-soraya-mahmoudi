@@ -1,25 +1,26 @@
 {
-    "compilerOptions": {
-      "module": "NodeNext",
-      "moduleResolution": "nodenext",
-      "target": "ES2024",
-      "rootDir": "src",
-      "outDir": "dist",
-      "resolveJsonModule": true,
-      "esModuleInterop": true,
-      "forceConsistentCasingInFileNames": true,
-      "strict": true,
-      "strictNullChecks": true,
-      "strictPropertyInitialization": true,
-      "noImplicitOverride": true,
-      "noUnusedLocals": true,
-      "noUnusedParameters": true,
-      "skipLibCheck": true,
-      "declaration": false,
-      "moduleDetection": "force",
-      "noEmit": false
-    },
-    "include": ["src"],
-    "exclude": ["node_modules", "src/tests"]
-  }
-  
+  "compilerOptions": {
+    "module": "NodeNext",
+    "moduleResolution": "nodenext",
+    "target": "ES2024",
+    "rootDir": "src",
+    "outDir": "dist",
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "strictNullChecks": true,
+    "strictPropertyInitialization": true,
+    "noImplicitOverride": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "skipLibCheck": true,
+    "declaration": false,
+    "moduleDetection": "force",
+    "noEmit": false,
+    "emitDecoratorMetadata": true, // @typegoose/typegoose
+    "experimentalDecorators": true // @typegoose/typegoose
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "src/tests"]
+}

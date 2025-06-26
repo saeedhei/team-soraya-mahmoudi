@@ -1,0 +1,54 @@
+// src/modules/user/services/auth.service.ts
+
+import bcrypt from 'bcrypt';
+import { Service } from 'typedi';
+import { UserModel } from '../entity/user.entity';
+import { signToken } from '../../../core/utils/auth';
+import crypto from 'crypto';
+import { transporter } from '../../../core/utils/mailer';
+
+@Service()
+export class AuthService {
+  async register(email: string, password: string) {
+    const hashed = await bcrypt.hash(password, 10);
+
+    // Generate verification token
+    const verifyToken = crypto.randomBytes(32).toString('hex');
+    const verifyTokenExpiry = new Date(Date.now() + 1000 * 60 * 60); // 1 hour
+
+    const user = new UserModel({
+      email,
+      password: hashed,
+      verifyToken,
+      verifyTokenExpiry,
+    });
+
+    await user.save();
+
+    // Send verification email
+    const verificationLink = `http://localhost:4000/verify-email?token=${verifyToken}&email=${email}`;
+
+    await transporter.sendMail({
+      from: '"My App" <no-reply@myapp.com>',
+      to: email,
+      subject: 'Verify your email',
+      html: `Please click <a href="${verificationLink}">this link</a> to verify your email.`,
+    });
+
+    return user;
+  }
+
+  async login(email: string, password: string) {
+    const user = await UserModel.findOne({ email });
+
+    if (!user || !(await bcrypt.compare(password, user.password))) {
+      throw new Error('Invalid credentials');
+    }
+
+    if (!user.isVerified) {
+      throw new Error('Please verify your email');
+    }
+
+    return signToken({ id: user._id });
+  }
+}

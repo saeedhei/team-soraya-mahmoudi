@@ -3,19 +3,19 @@ import dotenv from 'dotenv';
 dotenv.config({ path: '.env.development' });
 import { validateEnv } from './utils/validateEnv';
 validateEnv();
+import { connectToMongoDB } from './core/database/mongo';
+import { setupApollo } from './app';
 
-import { connectToMongoDB } from './infrastructure/database/connection';
-import { app, initApollo } from './app';
-
-const port = process.env.PORT;
+const PORT = process.env.PORT;
 
 async function startServer() {
   try {
     await connectToMongoDB();
-    await initApollo();
+    const app = await setupApollo();
 
-    app.listen(port, () => {
-      console.log(`🚀 Server ready at http://localhost:${port}/graphql`);
+    app.listen(PORT, () => {
+      console.log(`🚀 Server ready at http://localhost:${PORT}/graphql`);
+      console.log(`🚀 Server ready at http://localhost:${PORT}/health`);
     });
   } catch (error) {
     console.error('❌ Failed to start server:', error);
