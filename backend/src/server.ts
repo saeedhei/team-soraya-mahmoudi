@@ -1,7 +1,7 @@
 // src/server.ts
 import dotenv from 'dotenv';
 dotenv.config({ path: '.env.development' });
-import { validateEnv } from './utils/validateEnv';
+import { validateEnv } from './core/utils/validateEnv';
 validateEnv();
 import { connectToMongoDB } from './core/database/mongo';
 import { setupApollo } from './app';
