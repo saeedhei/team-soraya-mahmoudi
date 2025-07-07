@@ -12,3 +12,11 @@ export class LoginInput {
   @Field() email!: string;
   @Field() password!: string;
 }
+
+@InputType()
+export class ResetPasswordInput {
+  @Field() email!: string;
+  @Field() token!: string;
+  @Field() newPassword!: string;
+}
+

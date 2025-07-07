@@ -77,5 +77,28 @@ export class AuthService {
   
     return true;
   }
+
+  async resetPassword(email: string, token: string, newPassword: string) {
+    const user = await UserModel.findOne({
+      email,
+      resetToken: token,
+      resetTokenExpiry: { $gt: new Date() },
+    });
+  
+    if (!user) {
+      throw new Error('Invalid or expired token');
+    }
+  
+    const hashed = await bcrypt.hash(newPassword, 10);
+  
+    user.password = hashed;
+    user.resetToken = undefined;
+    user.resetTokenExpiry = undefined;
+  
+    await user.save();
+  
+    return true;
+  }
+  
   
 }

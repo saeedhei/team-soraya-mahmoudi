@@ -2,9 +2,10 @@
 import { Resolver, Mutation, Arg, Ctx, Query } from 'type-graphql';
 import { Inject, Service } from 'typedi';
 import { AuthService } from '../services/auth.service';
-import { RegisterInput, LoginInput } from '../types/user.types';
+import { RegisterInput, LoginInput , ResetPasswordInput} from '../types/user.types';
 import { User } from '../entity/user.entity';
 import { UserService } from '../services/user.service';
+
 
 @Resolver()
 @Service()
@@ -27,6 +28,11 @@ export class UserResolver {
   @Mutation(() => Boolean)
   async forgotPassword(@Arg('email') email: string) {
     return this.authService.forgotPassword(email);
+  }
+
+  @Mutation(() => Boolean)
+  async resetPassword(@Arg('data') data: ResetPasswordInput) {
+    return this.authService.resetPassword(data.email, data.token, data.newPassword);
   }
 
   @Query(() => User, { nullable: true })
