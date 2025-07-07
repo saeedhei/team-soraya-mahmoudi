@@ -26,7 +26,7 @@ export class AuthService {
     await user.save();
 
     // Send verification email
-    const verificationLink = `http://localhost:4000/verify-email?token=${verifyToken}&email=${email}`;
+    const verificationLink = `http://localhost:3000/auth/verify-email?token=${verifyToken}&email=${email}`;
 
     await transporter.sendMail({
       from: '"My App" <no-reply@myapp.com>',
@@ -66,7 +66,7 @@ export class AuthService {
     user.resetTokenExpiry = resetTokenExpiry;
     await user.save();
   
-    const resetLink = `http://localhost:3000/reset-password?token=${resetToken}&email=${email}`;
+    const resetLink = `http://localhost:5173/reset-password?token=${resetToken}&email=${email}`;
   
     await transporter.sendMail({
       from: '"My App" <no-reply@myapp.com>',
