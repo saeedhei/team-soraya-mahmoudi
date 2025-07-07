@@ -23,6 +23,12 @@ export class User {
 
   @Property()
   verifyTokenExpiry?: Date;
+
+  @Property()
+  resetToken?: string;
+
+  @Property()
+  resetTokenExpiry?: Date;
 }
 
 export const UserModel = getModelForClass(User);

@@ -24,6 +24,11 @@ export class UserResolver {
     return this.authService.login(data.email, data.password);
   }
 
+  @Mutation(() => Boolean)
+  async forgotPassword(@Arg('email') email: string) {
+    return this.authService.forgotPassword(email);
+  }
+
   @Query(() => User, { nullable: true })
   async me(@Ctx() ctx: any) {
     const userId = ctx.user?.id;

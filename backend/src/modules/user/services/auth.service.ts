@@ -51,4 +51,31 @@ export class AuthService {
 
     return signToken({ id: user._id });
   }
+
+  async forgotPassword(email: string) {
+    const user = await UserModel.findOne({ email });
+  
+    if (!user) {
+      throw new Error('User not found');
+    }
+  
+    const resetToken = crypto.randomBytes(32).toString('hex');
+    const resetTokenExpiry = new Date(Date.now() + 1000 * 60 * 60); // 1 hour
+  
+    user.resetToken = resetToken;
+    user.resetTokenExpiry = resetTokenExpiry;
+    await user.save();
+  
+    const resetLink = `http://localhost:3000/reset-password?token=${resetToken}&email=${email}`;
+  
+    await transporter.sendMail({
+      from: '"My App" <no-reply@myapp.com>',
+      to: email,
+      subject: 'Reset your password',
+      html: `Please click <a href="${resetLink}">this link</a> to reset your password.`,
+    });
+  
+    return true;
+  }
+  
 }
