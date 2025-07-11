@@ -5,8 +5,6 @@ import { AuthService } from '../services/auth.service';
 import { RegisterInput, LoginInput , ResetPasswordInput} from '../types/user.types';
 import { User } from '../entity/user.entity';
 import { UserService } from '../services/user.service';
-
-
 @Resolver()
 @Service()
 export class UserResolver {
