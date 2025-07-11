@@ -33,20 +33,34 @@ const ResetPasswordPage = () => {
     }
 
     try {
-      const response = await fetch('http://localhost:3000/reset-password', {
+      const response = await fetch('http://localhost:3000/graphql', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ token, newPassword }),
+        body: JSON.stringify({ 
+          query: `
+          mutation ResetPassword($data: ResetPasswordInput!) {
+            resetPassword(data: $data)
+          }
+        `,
+        variables: {
+          data: {
+            email: params.get('email'),
+            token,
+            newPassword,
+          },
+        },
+         }),
       });
       const data = await response.json();
 
-      if (response.ok) {
-        setMessage(data.message);
+      if (data.errors) {
+        setMessage(data.errors[0].message || 'Failed to reset password');
+
+      } else {
+        setMessage('Password reset successfully!');
         setTimeout(() => {
           navigate('/login');
         }, 3000);
-      } else {
-        setMessage(data.message || 'Failed to reset password');
       }
     } catch (error) {
       setMessage('Something went wrong');

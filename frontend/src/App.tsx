@@ -13,6 +13,8 @@ import DoctorAppointments from '@/pages/DoctorAppointments';
 import PatientAppointments from '@/pages/PatientAppointments';
 import BookAppointmentPage from "@/pages/BookAppointmentPage";
 import RoleBasedRoute from '@/components/auth/RoleBasedRoute';
+import ResetPasswordPage from '@/pages/ResetPasswordPage';
+
 
 export default function App() {
   return (
@@ -20,6 +22,8 @@ export default function App() {
       <Route path="/" element={<Home />} />
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
+      <Route path="/reset-password" element={<ResetPasswordPage />} />
+
 
       <Route element={<RoleBasedRoute allowedRoles={['doctor']} />}>
         <Route path="/doctor-dashboard" element={<DoctorDashboard />} />
