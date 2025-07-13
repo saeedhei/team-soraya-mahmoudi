@@ -36,6 +36,12 @@ export class User {
   @Field()
   @Property({ default: false })
   isVerified!: boolean;
+
+  @Property()
+  verifyToken?: string;
+
+  @Property()
+  verifyTokenExpiry?: Date;
 }
 
 export const UserModel = getModelForClass(User);
@@ -65,12 +71,9 @@ export const signToken = (payload: object): string => {
   return jwt.sign(payload, JWT_SECRET, { expiresIn: '7d' });
 };
 
-export const verifyToken = (token: string) => {
-  return jwt.verify(token, JWT_SECRET);
-};
-
 // --------- STEP 4: auth.service.ts ---------
 // src/modules/user/services/auth.service.ts
+
 
 import bcrypt from 'bcrypt';
 import { Service } from 'typedi';
@@ -125,6 +128,7 @@ export class AuthService {
   }
 }
 
+
 // --------- STEP 5: user.service.ts ---------
 // src/modules/user/services/user.service.ts
 import { Service } from 'typedi';
@@ -140,6 +144,7 @@ export class UserService {
     return UserModel.findByIdAndUpdate(id, { isVerified: true }, { new: true });
   }
 }
+
 
 // --------- STEP 6: user.resolver.ts ---------
 // src/modules/user/resolvers/user.resolver.ts
@@ -174,6 +179,7 @@ export class UserResolver {
     return this.userService.getUserById(userId);
   }
 }
+
 
 // --------- STEP 7: apollo server.ts ---------
 // src/core/apollo/server.ts

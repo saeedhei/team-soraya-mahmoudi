@@ -35,13 +35,20 @@ app.use('/auth', verifyRoute);
 // app.use('/appointments', appointmentsRoutes);
 
 // app.get('/verify-account', verifyAccountHandler);
-app.get('/health', async (_req, res) => {
+app.get('/maildev', async (_req, res) => {
   try {
     await transporter.verify();
     res.status(200).send('✅ OK - Mail server is reachable');
   } catch {
     res.status(500).send('Mail server is NOT reachable');
   }
+});
+app.get('/health', (_req, res) => {
+  res.status(200).json({
+    status: 'OK',
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime(),
+  });
 });
 
 export async function setupApollo() {
