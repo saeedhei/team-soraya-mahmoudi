@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
 import PublicLayout from '@/layouts/PublicLayout';
+import { useMutation } from '@apollo/client';
+import { FORGOT_PASSWORD_MUTATION } from '@/graphql/mutations/authMutations';
 
 const ForgotPasswordPage = () => {
   const [email, setEmail] = useState('');
+  const [forgotPassword] = useMutation(FORGOT_PASSWORD_MUTATION);
+
   const [message, setMessage] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -16,13 +20,14 @@ const ForgotPasswordPage = () => {
     setMessage(null);
 
     try {
-      const response = await fetch('http://localhost:3000/forgot-password', {
-        method: 'POST',
-        body: JSON.stringify({ email }),
-        headers: { 'Content-Type': 'application/json' },
+      const { data } = await forgotPassword({
+        variables: { email },
       });
-      const data = await response.json();
-      setMessage(data.message || 'If this email exists, a reset link has been sent.');
+      if (data?.forgotPassword) {
+        setMessage('If this email exists, a reset link has been sent.');
+      } else {
+        setMessage('Failed to send reset link. Try again.');
+      }
     } catch (error) {
       setMessage('Something went wrong. Please try again.');
     } finally {
