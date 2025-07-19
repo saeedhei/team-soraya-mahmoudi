@@ -4,7 +4,7 @@ import { BrowserRouter } from "react-router-dom";
 import {ApolloProvider} from "@apollo/client";
 import client from './apollo/client'
 import './index.css'
-import App from './App.tsx'
+import AppRouter from './router/Router.tsx'
 import { AuthProvider } from './contexts/AuthContext.tsx';
 
 createRoot(document.getElementById('root')!).render(
@@ -12,7 +12,7 @@ createRoot(document.getElementById('root')!).render(
     <BrowserRouter>
       <ApolloProvider client={client}>
          <AuthProvider>
-            <App />
+            <AppRouter />
          </AuthProvider>
       </ApolloProvider>     
     </BrowserRouter>
