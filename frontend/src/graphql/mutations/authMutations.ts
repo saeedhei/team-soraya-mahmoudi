@@ -18,4 +18,8 @@ export const FORGOT_PASSWORD_MUTATION = gql`
     forgotPassword(email: $email)
   }
 `;
-
+export const RESET_PASSWORD_MUTATION = gql`
+  mutation ResetPassword($data: ResetPasswordInput!) {
+    resetPassword(data: $data)
+  }
+`;

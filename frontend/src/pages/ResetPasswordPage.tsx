@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import PublicLayout from '@/layouts/PublicLayout';
+import { useMutation } from '@apollo/client';
+import { RESET_PASSWORD_MUTATION } from '@/graphql/mutations/authMutations';
 
 const ResetPasswordPage = () => {
   const [newPassword, setNewPassword] = useState('');
@@ -14,56 +16,43 @@ const ResetPasswordPage = () => {
 
   const params = new URLSearchParams(location.search);
   const token = params.get('token');
+  const email = params.get('email');
+
+  const [resetPassword] = useMutation(RESET_PASSWORD_MUTATION);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!token) {
+    if (!token || !email) {
       setMessage('Invalid or missing token');
+      return;
+    }
+
+    if (newPassword !== confirmPassword) {
+      setMessage('Passwords do not match');
       return;
     }
 
     setIsSubmitting(true);
     setMessage(null);
 
-    if (newPassword !== confirmPassword) {
-      setMessage('Passwords do not match');
-      setIsSubmitting(false);
-      return;
-    }
-
     try {
-      const response = await fetch('http://localhost:3000/graphql', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          query: `
-          mutation ResetPassword($data: ResetPasswordInput!) {
-            resetPassword(data: $data)
-          }
-        `,
+      const { data } = await resetPassword({
         variables: {
-          data: {
-            email: params.get('email'),
-            token,
-            newPassword,
-          },
+          data: { email, token, newPassword },
         },
-         }),
       });
-      const data = await response.json();
 
-      if (data.errors) {
-        setMessage(data.errors[0].message || 'Failed to reset password');
-
-      } else {
+      if (data?.resetPassword) {
         setMessage('Password reset successfully!');
         setTimeout(() => {
           navigate('/login');
         }, 3000);
+      } else {
+        setMessage('Failed to reset password. Try again.');
       }
     } catch (error) {
-      setMessage('Something went wrong');
+      setMessage('Something went wrong. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
