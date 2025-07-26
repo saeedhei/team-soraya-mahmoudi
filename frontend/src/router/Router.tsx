@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import Signup from "@/pages/SignupPage";
-import Login from "@/pages/LoginPage";
+import Signup from "@/pages/Signup";
+import Login from "@/pages/Login";
 import ForgotPassword from "@/pages/ForgotPasswordPage";
 import ResetPassword from "@/pages/ResetPasswordPage";
 import Profile from "@/pages/Profile";
@@ -14,7 +14,6 @@ import PageNotFound from "@/pages/PageNotFound";
 
 export default function AppRouter() {
   return (
-    <Router>
       <Routes>
         {/* Public Routes */}
         <Route path="/" element={<Navigate to="/login" replace />} />
@@ -43,6 +42,5 @@ export default function AppRouter() {
         {/* Fallback */}
         <Route path="*" element={<PageNotFound />} />
       </Routes>
-    </Router>
   );
 }
