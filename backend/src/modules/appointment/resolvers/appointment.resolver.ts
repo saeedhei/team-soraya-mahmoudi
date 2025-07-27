@@ -1,8 +1,11 @@
 import { Arg, Authorized, Ctx, Mutation, Resolver } from 'type-graphql';
-import { Appointment, AppointmentModel, AppointmentStatus } from '../entity/appointment.entity';
+import { Appointment, AppointmentModel } from '../entity/appointment.entity';
+import {AppointmentStatus} from '../types/enums'
 import { User } from '../../user/entity/user.entity';
 import { AppContext } from '../../../types/context';
 import { CreateAppointmentInput } from '../types/appointment.types';
+import { Service } from 'typedi';
+@Service()
 @Resolver(() => Appointment)
 export class AppointmentResolver {
   @Authorized()
