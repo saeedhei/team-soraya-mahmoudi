@@ -1,16 +1,7 @@
 import { getModelForClass, prop, Ref } from '@typegoose/typegoose';
-import { Field, ID, ObjectType, registerEnumType } from 'type-graphql';
+import { Field, ID, ObjectType} from 'type-graphql';
 import { User } from '../../user/entity/user.entity'
-
-export enum AppointmentStatus {
-  PENDING = 'pending',
-  CONFIRMED = 'confirmed',
-  CANCELLED = 'cancelled',
-}
-
-registerEnumType(AppointmentStatus, {
-  name: 'AppointmentStatus',
-});
+import { AppointmentStatus } from '../types/enums';
 
 @ObjectType()
 export class Appointment {

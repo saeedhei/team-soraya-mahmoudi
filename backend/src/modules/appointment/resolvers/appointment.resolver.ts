@@ -1,8 +1,11 @@
 import { Arg, Authorized, Ctx, Mutation, Resolver } from 'type-graphql';
-import { Appointment, AppointmentModel, AppointmentStatus } from '../entity/appointment.entity';
+import { Appointment, AppointmentModel } from '../entity/appointment.entity';
+import {AppointmentStatus} from '../types/enums'
 import { User } from '../../user/entity/user.entity';
 import { AppContext } from '../../../types/context';
-
+import { CreateAppointmentInput } from '../types/appointment.types';
+import { Service } from 'typedi';
+@Service()
 @Resolver(() => Appointment)
 export class AppointmentResolver {
   @Authorized()
@@ -21,21 +24,18 @@ export class AppointmentResolver {
   @Authorized()
   @Mutation(() => Appointment)
   async createAppointment(
-    @Arg('doctorId') doctorId: string,
-    @Arg('date') date: Date,
-    @Arg('time') time: string,
-    @Arg('notes', { nullable: true }) notes: string,
+     @Arg('input') input: CreateAppointmentInput,
     @Ctx() ctx: AppContext
   ): Promise<Appointment> {
     const user = ctx.user as User;
     if (!user) throw new Error('Unauthorized');
 
     const newAppointment = new AppointmentModel({
-      doctor: doctorId,
+      doctor: input.doctorId,
       patient: user._id,
-      date,
-      time,
-      notes,
+      date:input.date,
+      time:input.time,
+      notes:input.notes,
     });
 
     await newAppointment.save();

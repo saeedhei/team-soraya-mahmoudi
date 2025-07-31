@@ -7,10 +7,16 @@ export class User {
   @Field(() => ID)
   readonly _id!: string;
 
+  @Field(() => ID)
+  get id() {
+    return this._id;
+  }
+
   @Field()
   @Property({ required: true, unique: true })
   email!: string;
 
+  @Field()
   @Property({ required: true })
   password!: string;
 
@@ -29,6 +35,13 @@ export class User {
 
   @Property()
   resetTokenExpiry?: Date;
+  @Field({ nullable: true })
+  @Property()
+  firstName?: string;
+
+  @Field({ nullable: true })
+  @Property()
+  lastName?: string;
 }
 
 export const UserModel = getModelForClass(User);
