@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Signup from '@/pages/Signup';
-import Login from '@/pages/login/page';
+import Login from '@/pages/login';
 import ForgotPassword from '@/pages/ForgotPasswordPage';
 import ResetPassword from '@/pages/ResetPasswordPage';
 import Profile from '@/pages/Profile';
