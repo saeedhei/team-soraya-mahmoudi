@@ -1,6 +1,6 @@
 import { Routes, Route } from 'react-router-dom';
 import Home from '@/pages/Home';
-import Login from '@/pages/Login';
+import Login from '@/pages/login/page';
 import Signup from '@/pages/Signup';
 import PrivateRoute from '@/components/auth/PrivateRoute';
 import DoctorDashboard from '@/pages/DoctorDashboard';
@@ -11,10 +11,9 @@ import DoctorLayout from '@/layouts/DoctorLayout';
 import PatientLayout from '@/layouts/PatientLayout';
 import DoctorAppointments from '@/pages/DoctorAppointments';
 import PatientAppointments from '@/pages/PatientAppointments';
-import BookAppointmentPage from "@/pages/BookAppointmentPage";
+import BookAppointmentPage from '@/pages/BookAppointmentPage';
 import RoleBasedRoute from '@/components/auth/RoleBasedRoute';
 import ResetPasswordPage from '@/pages/ResetPasswordPage';
-
 
 export default function App() {
   return (
@@ -23,7 +22,6 @@ export default function App() {
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
       <Route path="/reset-password" element={<ResetPasswordPage />} />
-
 
       <Route element={<RoleBasedRoute allowedRoles={['doctor']} />}>
         <Route path="/doctor-dashboard" element={<DoctorDashboard />} />
@@ -35,7 +33,6 @@ export default function App() {
             </DoctorLayout>
           }
         />
-        
       </Route>
 
       <Route element={<RoleBasedRoute allowedRoles={['patient']} />}>
