@@ -5,6 +5,8 @@ import { InputType, Field } from 'type-graphql';
 export class RegisterInput {
   @Field() email!: string;
   @Field() password!: string;
+  @Field()
+  role!: 'patient' | 'doctor';
 }
 
 @InputType()

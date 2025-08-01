@@ -7,11 +7,6 @@ export class User {
   @Field(() => ID)
   readonly _id!: string;
 
-  @Field(() => ID)
-  get id() {
-    return this._id;
-  }
-
   @Field()
   @Property({ required: true, unique: true })
   email!: string;
@@ -19,6 +14,10 @@ export class User {
   @Field()
   @Property({ required: true })
   password!: string;
+
+  @Field()
+  @Property({ enum: ['patient', 'doctor'], required: true })
+  role!: 'patient' | 'doctor';
 
   @Field()
   @Property({ default: false })

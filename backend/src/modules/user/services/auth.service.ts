@@ -9,7 +9,7 @@ import { transporter } from '../../../core/utils/mailer';
 
 @Service()
 export class AuthService {
-  async register(email: string, password: string) {
+  async register(email: string, password: string, role: 'patient' | 'doctor') {
     const hashed = await bcrypt.hash(password, 10);
 
     // Generate verification token
@@ -19,6 +19,7 @@ export class AuthService {
     const user = new UserModel({
       email,
       password: hashed,
+      role,
       verifyToken,
       verifyTokenExpiry,
     });
