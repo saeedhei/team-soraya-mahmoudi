@@ -1,6 +1,5 @@
 // src/modules/user/types/user.types.ts
-import { InputType, Field } from 'type-graphql';
-
+import { InputType, ObjectType, Field } from 'type-graphql';
 @InputType()
 export class RegisterInput {
   @Field() email!: string;
@@ -22,3 +21,33 @@ export class ResetPasswordInput {
   @Field() newPassword!: string;
 }
 
+@ObjectType()
+export class PublicUser {
+  @Field()
+  _id!: string;
+
+  @Field()
+  email!: string;
+
+  @Field()
+  role!: 'patient' | 'doctor';
+
+  @Field()
+  isVerified!: boolean;
+
+  @Field({ nullable: true })
+  firstName?: string;
+
+  @Field({ nullable: true })
+  lastName?: string;
+}
+
+
+@ObjectType()
+export class LoginResponse {
+  @Field()
+  token!: string;
+
+  @Field(() => PublicUser)
+  user!: PublicUser;
+}

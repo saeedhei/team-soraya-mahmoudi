@@ -10,6 +10,19 @@ mutation Signup($data: RegisterInput!) {
 }
 `;
 
+export const LOGIN_MUTATION = gql`
+  mutation Login($data: LoginInput!) {
+    login(data: $data) {
+      token
+      user {
+        _id
+        email
+        role
+      }
+    }
+  }
+`;
+
 export const FORGOT_PASSWORD_MUTATION = gql`
   mutation ForgotPassword($email: String!) {
     forgotPassword(email: $email)

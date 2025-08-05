@@ -5,6 +5,7 @@ import { AuthService } from '../services/auth.service';
 import { RegisterInput, LoginInput , ResetPasswordInput} from '../types/user.types';
 import { User } from '../entity/user.entity';
 import { UserService } from '../services/user.service';
+import { LoginResponse } from '../types/user.types';
 @Resolver()
 @Service()
 export class UserResolver {
@@ -18,8 +19,8 @@ export class UserResolver {
     return this.authService.register(data.email, data.password,data.role);
   }
 
-  @Mutation(() => String)
-  async login(@Arg('data') data: LoginInput) {
+  @Mutation(() => LoginResponse)
+  async login(@Arg('data') data: LoginInput): Promise<LoginResponse> {
     return this.authService.login(data.email, data.password);
   }
 

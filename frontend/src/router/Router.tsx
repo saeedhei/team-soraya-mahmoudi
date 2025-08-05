@@ -1,4 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { useAuth } from '@/contexts/useAuth';
+
 import Signup from '@/pages/Signup';
 import Login from '@/pages/login';
 import ForgotPassword from '@/pages/ForgotPasswordPage';
@@ -13,6 +15,12 @@ import RoleBasedRoute from '@/components/auth/RoleBasedRoute';
 import PageNotFound from '@/pages/PageNotFound';
 
 export default function AppRouter() {
+  const { loading } = useAuth();
+
+  if (loading) {
+    return <p className="text-center mt-20">Loading...</p>;
+  }
+  
   return (
     <Routes>
       {/* Public Routes */}
