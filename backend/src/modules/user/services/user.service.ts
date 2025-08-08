@@ -4,11 +4,11 @@ import { UserModel } from '../entity/user.entity';
 
 @Service()
 export class UserService {
-  async getUserById(id: string) {
-    return UserModel.findById(id);
+  async getUserById(_id: string) {
+    return UserModel.findById(_id);
   }
 
-  async verifyUserEmail(id: string) {
-    return UserModel.findByIdAndUpdate(id, { isVerified: true }, { new: true });
+  async verifyUserEmail(_id: string) {
+    return UserModel.findByIdAndUpdate(_id, { isVerified: true }, { new: true });
   }
 }

@@ -5,7 +5,7 @@ import { prop as Property, getModelForClass } from '@typegoose/typegoose';
 @ObjectType()
 export class User {
   @Field(() => ID)
-  readonly _id!: string;
+  readonly id!: string;
 
   @Field()
   @Property({ required: true, unique: true })

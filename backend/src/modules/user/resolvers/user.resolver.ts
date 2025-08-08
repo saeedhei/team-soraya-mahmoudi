@@ -36,7 +36,9 @@ export class UserResolver {
 
   @Query(() => User, { nullable: true })
   async me(@Ctx() ctx: any) {
-    const userId = ctx.user?.id;
-    return this.userService.getUserById(userId);
+    if (!ctx.user?._id) {
+      throw new Error('Not authenticated');
+    }
+    return this.userService.getUserById(ctx.user._id);
   }
 }
