@@ -49,7 +49,6 @@ export class AppointmentResolver {
       throw new Error('Unauthorized');
     }
 
-    console.log('🧠 Fetching appointments for doctor:', user.id);
     return AppointmentModel.find({ doctor: user.id});
   }
 }

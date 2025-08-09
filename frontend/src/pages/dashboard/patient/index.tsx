@@ -1,5 +1,6 @@
 import { useAuth } from '@/contexts/useAuth';
 import { gql, useQuery } from '@apollo/client';
+
 import { Navigate } from 'react-router-dom';
 
 const GET_PATIENT_APPOINTMENTS = gql`
