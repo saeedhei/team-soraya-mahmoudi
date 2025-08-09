@@ -5,6 +5,7 @@ import { AuthService } from '../services/auth.service';
 import { RegisterInput, LoginInput , ResetPasswordInput} from '../types/user.types';
 import { User } from '../entity/user.entity';
 import { UserService } from '../services/user.service';
+import { LoginResponse } from '../types/user.types';
 @Resolver()
 @Service()
 export class UserResolver {
@@ -15,11 +16,11 @@ export class UserResolver {
 
   @Mutation(() => User)
   async register(@Arg('data') data: RegisterInput) {
-    return this.authService.register(data.email, data.password);
+    return this.authService.register(data.email, data.password,data.role);
   }
 
-  @Mutation(() => String)
-  async login(@Arg('data') data: LoginInput) {
+  @Mutation(() => LoginResponse)
+  async login(@Arg('data') data: LoginInput): Promise<LoginResponse> {
     return this.authService.login(data.email, data.password);
   }
 
@@ -35,7 +36,9 @@ export class UserResolver {
 
   @Query(() => User, { nullable: true })
   async me(@Ctx() ctx: any) {
-    const userId = ctx.user?.id;
-    return this.userService.getUserById(userId);
+    if (!ctx.user?._id) {
+      throw new Error('Not authenticated');
+    }
+    return this.userService.getUserById(ctx.user._id);
   }
 }

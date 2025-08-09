@@ -5,7 +5,7 @@ import { AppointmentStatus } from '../types/enums';
 
 @ObjectType()
 export class Appointment {
-  @Field(() => ID)
+  @Field(() => ID,{name: '_id'})
   readonly id!: string;
 
   @Field(() => User)

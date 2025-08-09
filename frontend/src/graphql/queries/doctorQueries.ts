@@ -1,12 +1,21 @@
-import { gql } from "@apollo/client";
+import { gql } from '@apollo/client';
 
-export const GET_DOCTORS = gql`
-  query GetDoctors {
-    getDoctors {
-      id
-      username
-      email
-      specialization
+export const GET_DOCTOR_APPOINTMENTS = gql`
+  query GetDoctorAppointments {
+    getAppointmentsForDoctor {
+      _id
+      date
+      time
+      status
+      notes
+      doctor {
+        _id
+        email
+      }
+      patient {
+        _id
+        email
+      }
     }
   }
 `;

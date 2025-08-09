@@ -1,18 +1,26 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { useAuth } from '@/contexts/useAuth';
+
 import Signup from '@/pages/Signup';
 import Login from '@/pages/login';
-import ForgotPassword from '@/pages/ForgotPasswordPage';
-import ResetPassword from '@/pages/ResetPasswordPage';
-import Profile from '@/pages/Profile';
-import DoctorDashboard from '@/pages/DoctorDashboard';
-import PatientDashboard from '@/pages/PatientDashboard';
-import DoctorAppointments from '@/pages/DoctorAppointments';
-import PatientAppointments from '@/pages/PatientAppointments';
+import ForgotPassword from '@/pages/forgot-password';
+import ResetPassword from '@/pages/reset-password';
+import Profile from '@/pages/dashboard/profile';
+import DoctorDashboard from '@/pages/dashboard/doctor';
+import PatientDashboard from '@/pages/dashboard/patient';
+import DoctorAppointments from '@/pages/doctor-appointment';
+import PatientAppointments from '@/pages/patient-appoimtment';
 import PrivateRoute from '@/components/auth/PrivateRoute';
 import RoleBasedRoute from '@/components/auth/RoleBasedRoute';
 import PageNotFound from '@/pages/PageNotFound';
 
 export default function AppRouter() {
+  const { loading } = useAuth();
+
+  if (loading) {
+    return <p className="text-center mt-20">Loading...</p>;
+  }
+  
   return (
     <Routes>
       {/* Public Routes */}

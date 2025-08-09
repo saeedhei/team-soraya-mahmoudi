@@ -1,5 +1,5 @@
 // src/app.ts
-import express, { Request } from 'express';
+import express, { Request, Response } from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import { expressMiddleware } from '@apollo/server/express4';
@@ -63,12 +63,17 @@ export async function setupApollo() {
   app.use(
     '/graphql',
     expressMiddleware(server, {
-      context: async ({ req }: { req: Request }) =>
+      context: async ({ req, res }: { req: Request; res: Response }) =>
         new Promise((resolve, reject) => {
           passport.authenticate('jwt', { session: false }, (err: unknown, user: User | false) => {
-            if (err) return reject(err);
-            resolve({ user: user || null });
-          })(req);
+            console.log('🟡 Incoming Authorization header:', req.headers.authorization);
+            console.log('🟢 Decoded user from JWT:', user);
+            if (err) {
+              console.error('🔴 Passport error:', err);
+              return reject(err);
+            }
+            resolve({ user: user || null, req, res });
+          })(req, res);
         }),
     }),
   );

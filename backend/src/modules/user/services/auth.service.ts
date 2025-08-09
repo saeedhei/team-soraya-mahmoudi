@@ -9,7 +9,7 @@ import { transporter } from '../../../core/utils/mailer';
 
 @Service()
 export class AuthService {
-  async register(email: string, password: string) {
+  async register(email: string, password: string, role: 'patient' | 'doctor') {
     const hashed = await bcrypt.hash(password, 10);
 
     // Generate verification token
@@ -19,6 +19,7 @@ export class AuthService {
     const user = new UserModel({
       email,
       password: hashed,
+      role,
       verifyToken,
       verifyTokenExpiry,
     });
@@ -49,32 +50,43 @@ export class AuthService {
       throw new Error('Please verify your email');
     }
 
-    return signToken({ id: user._id });
+    const token = signToken({ _id: user._id });
+    return {
+      token,
+      user: {
+        _id: user._id.toString(),
+        email: user.email,
+        role: user.role,
+        isVerified: user.isVerified,
+        firstName: user.firstName,
+        lastName: user.lastName,
+      },
+    };
   }
 
   async forgotPassword(email: string) {
     const user = await UserModel.findOne({ email });
-  
+
     if (!user) {
       throw new Error('User not found');
     }
-  
+
     const resetToken = crypto.randomBytes(32).toString('hex');
     const resetTokenExpiry = new Date(Date.now() + 1000 * 60 * 60); // 1 hour
-  
+
     user.resetToken = resetToken;
     user.resetTokenExpiry = resetTokenExpiry;
     await user.save();
-  
+
     const resetLink = `http://localhost:5173/reset-password?token=${resetToken}&email=${email}`;
-  
+
     await transporter.sendMail({
       from: '"My App" <no-reply@myapp.com>',
       to: email,
       subject: 'Reset your password',
       html: `Please click <a href="${resetLink}">this link</a> to reset your password.`,
     });
-  
+
     return true;
   }
 
@@ -84,21 +96,19 @@ export class AuthService {
       resetToken: token,
       resetTokenExpiry: { $gt: new Date() },
     });
-  
+
     if (!user) {
       throw new Error('Invalid or expired token');
     }
-  
+
     const hashed = await bcrypt.hash(newPassword, 10);
-  
+
     user.password = hashed;
     user.resetToken = undefined;
     user.resetTokenExpiry = undefined;
-  
+
     await user.save();
-  
+
     return true;
   }
-  
-  
 }

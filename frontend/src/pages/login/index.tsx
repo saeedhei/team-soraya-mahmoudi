@@ -1,3 +1,5 @@
+import { LOGIN_MUTATION } from '@/graphql/mutations/authMutations';
+import { useMutation } from '@apollo/client';
 import { useForm } from 'react-hook-form';
 import PublicLayout from '@/layouts/PublicLayout';
 import { Navigate } from 'react-router-dom';
@@ -11,13 +13,18 @@ interface LoginFormValues {
 }
 
 export default function Login() {
-  const { user, token, login } = useAuth();
+  const [loginMutation] = useMutation(LOGIN_MUTATION);
+  const { user, token, login , loading} = useAuth();
   const [status, setStatus] = useState<string | null>(null);
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<LoginFormValues>();
+  
+  if (loading) {
+    return <p className="text-center mt-20">Loading...</p>;
+  }
 
   if (token && user) {
     return <Navigate to={redirectToDashboard(user.role)} replace />;
@@ -27,40 +34,20 @@ export default function Login() {
     console.log('Login Data:', data);
 
     try {
-      const response = await fetch('http://localhost:3000/graphql', {
-        method: 'POST',
-        headers: { 'Content-type': 'application/json' },
-        body: JSON.stringify({
-          query: `
-          mutation Login($email: String!, $password: String!) {
-            login(email: $email, password: $password){
-              token
-              user{
-                id
-                username
-                role
-              }
-            }
-          }
-          `,
-          variables: {
+      const { data: loginResponse } = await loginMutation({
+        variables: {
+          data: {
             email: data.email,
             password: data.password,
           },
-        }),
+        },
       });
-      const responseData = await response.json();
 
-      if (responseData.errors) {
-        console.error('Login failed:', JSON.stringify(responseData.errors, null, 2));
-        setStatus(responseData.errors[0]?.message || 'Login failed');
-      } else {
-        const { token, user } = responseData.data.login;
-        login(user, token);
-      }
-    } catch (error) {
+      const { token, user } = loginResponse.login;
+      login(user, token);
+    } catch (error: any) {
       console.error('Error during login:', error);
-      setStatus('Unexpected error occurred during login.');
+      setStatus(error?.message || 'Login failed');
     }
   };
 
