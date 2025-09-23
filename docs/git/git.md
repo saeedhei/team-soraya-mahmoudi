@@ -3,7 +3,7 @@ git remote add origin https://github.com/saeedhei/team-soraya-mahmoudi.git
 git branch -M main
 
 git add .
-git commit -m "frontend folders updated"
+git commit -m "frontend tsconfig.app.json updated and need npm i"
 git push origin main
 
 git remote add origin https://github.com/saeedhei/team-soraya-mahmoudi.git
